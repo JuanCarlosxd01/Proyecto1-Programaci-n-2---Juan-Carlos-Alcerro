@@ -2,10 +2,10 @@
 package proyecto_vampirewargame;
 
 
-public class Proyecto_VampireWargame {
+public class Main {
 
     public static void main(String[] args) {
-        
+        MenuPrincipal menu = new MenuPrincipal();
     }
     
 }
