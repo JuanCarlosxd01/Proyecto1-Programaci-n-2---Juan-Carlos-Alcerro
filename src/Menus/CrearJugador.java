@@ -1,5 +1,5 @@
 
-package proyecto_vampirewargame;
+package Menus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,10 +7,12 @@ import java.util.ArrayList;
 
 public class CrearJugador extends IniciarSesion{
     
+    
     public CrearJugador(MenuDeInicio ventana, JPanel principal, ArrayList<Usuario> usuarios){
         super(ventana, principal, usuarios, "Crear jugador", "Ingrese Nombre de Usuario: ", "Ingrese Contraseña: ", "Crear", "Regresar");
     }
     
+    // si los campos estan vacios debe poner un aviso de que estan vacios 
     @Override
     public String accionarBoton(String leerUsuario, String leerContrasena, ArrayList<Usuario> usuarios, int numUsuarios){
         leerUsuario = leerUsuario.replaceAll("\\s+", "");

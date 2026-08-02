@@ -1,10 +1,11 @@
 
-package proyecto_vampirewargame;
+package Menus;
 
 public class Usuario {
     
     private String usuario;
     private String contrasena;
+    // agregar atributos
     
     public Usuario(String usuario, String contrasena){
         this.usuario = usuario;

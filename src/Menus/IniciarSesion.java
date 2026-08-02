@@ -1,5 +1,5 @@
 
-package proyecto_vampirewargame;
+package Menus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,9 +43,12 @@ public class IniciarSesion extends JPanel{
             mensaje.setText(txtMensaje);
             campoUsuario.setText(""); //sujeto a cambios
             campoContrasena.setText(""); // sujeto a cambios
+            if(txtMensaje.equals("Ha ingresado correctamente.")){
+                MenuPrincipal menuPr = new MenuPrincipal("MENU PRINCIPAL");
+            }
         });     
         btnRegresar.addActionListener(e -> {
-            ventana.cambiarPanel("Menu de Inicio");
+            ventana.cambiarPanel("MenuDeInicio");
         });
         
         principal.add(Box.createVerticalStrut(80));
