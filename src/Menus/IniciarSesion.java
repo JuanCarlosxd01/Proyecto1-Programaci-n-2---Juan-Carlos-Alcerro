@@ -83,6 +83,7 @@ public class IniciarSesion extends JPanel{
     }
     
     public String accionarBoton(String leerUsuario, String leerContrasena, ArrayList<Usuario> usuarios, int numUsuarios){
+        leerUsuario = leerUsuario.replaceAll("\\s+", "");
         if(numUsuarios < 0){
             return "No hay usuarios registrados en el juego";
         }

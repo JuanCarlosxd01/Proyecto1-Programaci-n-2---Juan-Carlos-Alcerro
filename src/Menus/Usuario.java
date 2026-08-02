@@ -54,11 +54,13 @@ public class Usuario {
         this.fechaIngreso = fechaIngreso;
     }
     
-    public void setActivo(){
+    public void setActivo(boolean activo){
         this.activo = activo;
     }
     
     public String mostrarInformacion(){
-        return "Nombre de Usuario: " + usuario + " Contrasena: " + contrasena + "Puntos conseguidos: " + puntos + "Fecha de Ingreso:" + fechaIngreso + "Cuenta activa: " + activo;
+        return "Nombre de Usuario: " + usuario + "\nContrasena: " + contrasena + "\nPuntos conseguidos: " + puntos + 
+                "\nFecha de Ingreso:" + fechaIngreso.get(Calendar.DAY_OF_MONTH) + "/" + fechaIngreso.get(Calendar.MONTH) + "/" + fechaIngreso.get(Calendar.YEAR) +
+                "\nCuenta activa: " + activo;
     }
 }

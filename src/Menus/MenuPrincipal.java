@@ -31,7 +31,7 @@ public class MenuPrincipal extends Menu{
         
         
         btnMiCuenta.addActionListener(e -> {  
-            MenuMiCuenta menuC = new MenuMiCuenta("MI CUENTA", contenedor, transicion);
+            MenuMiCuenta menuC = new MenuMiCuenta("MI CUENTA", contenedor, transicion, usuarios, usuarioActivo);
             contenedor.add(menuC, "MiCuenta");
             cambiarPanel("MiCuenta");
         });
