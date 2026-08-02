@@ -43,9 +43,6 @@ public class IniciarSesion extends JPanel{
             mensaje.setText(txtMensaje);
             campoUsuario.setText(""); //sujeto a cambios
             campoContrasena.setText(""); // sujeto a cambios
-            if(txtMensaje.equals("Ha ingresado correctamente.")){
-                MenuPrincipal menuPr = new MenuPrincipal("MENU PRINCIPAL");
-            }
         });     
         btnRegresar.addActionListener(e -> {
             ventana.cambiarPanel("MenuDeInicio");
@@ -93,7 +90,8 @@ public class IniciarSesion extends JPanel{
 
         if (usuario.getUsuario().equals(leerUsuario)) {
             if (usuario.getContrasena().equals(leerContrasena)) {
-                 return "Ha ingresado correctamente.";
+                ventana.cambiarPanel("MenuPrincipal");
+                return "Ha ingresado correctamente.";
             } else {
                 return "Contraseña incorrecta.";
             }

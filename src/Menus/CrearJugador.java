@@ -23,6 +23,7 @@ public class CrearJugador extends IniciarSesion{
         if(numUsuarios < 0){
             Usuario usuario = new Usuario(leerUsuario, leerContrasena);
             usuarios.add(usuario);
+            ventana.cambiarPanel("MenuPrincipal");
             return "Usuario creado correctamente";
         }
         

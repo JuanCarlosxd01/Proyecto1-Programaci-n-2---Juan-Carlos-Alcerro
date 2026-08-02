@@ -2,30 +2,25 @@
 package Menus;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MenuDeInicio extends Menu{
     
-    public MenuDeInicio(String texto){ 
-        super(texto);
+    
+    public MenuDeInicio(String texto,  JPanel contenedor, CardLayout transicion){ 
+        super(texto, contenedor, transicion);
+        JButton btnIniciarSesion = Botones(columna, panel, "Iniciar sesion", 60);
+        JButton btnCrearJugador = Botones(columna, panel, "Crear Jugador", 60);
+        JButton btnSalir = Botones(columna, panel, "Salir", 60);   
         
-        JButton btnIniciarSesion = Botones(columna, panel, "Iniciar sesion");
-        JButton btnCrearJugador = Botones(columna, panel, "Crear Jugador");
-        JButton btnSalir = Botones(columna, panel, "Salir");   
-        
-        JPanel principalIniciarSesion = new JPanel();
-        BoxLayout columnaIniciarSesion = BoxLayouts(principalIniciarSesion);
-        principalIniciarSesion.setLayout(columnaIniciarSesion);
+        JPanel principalIniciarSesion = crearPanel("IniciarSesion");
         IniciarSesion sesion = new IniciarSesion(this, principalIniciarSesion, usuarios, "Iniciar Sesion", "Nombre de Usuario: ", "Contraseña: ", "Ingresar", "Regresar"); 
-        contenedor.add(principalIniciarSesion, "IniciarSesion");
         btnIniciarSesion.addActionListener(e -> {    
             cambiarPanel("IniciarSesion");
         }); 
         
-        JPanel principalCrearJugador = new JPanel();
-        BoxLayout columnaCrearJugador = BoxLayouts(principalCrearJugador);
-        principalCrearJugador.setLayout(columnaCrearJugador);
+        JPanel principalCrearJugador = crearPanel("CrearJugador");
         CrearJugador crear = new CrearJugador(this, principalCrearJugador, usuarios);
-        contenedor.add(principalCrearJugador, "CrearJugador");
         btnCrearJugador.addActionListener(e -> {   
             cambiarPanel("CrearJugador");  
         });
@@ -33,11 +28,7 @@ public class MenuDeInicio extends Menu{
             System.exit(0);
         });
         
-        contenedor.add(panel, "MenuDeInicio");
-        add(contenedor);
-        transicion.show(contenedor, "MenuDeInicio");
-        
-        setVisible(true);
-        
+        add(panel);
+                
     }   
 }

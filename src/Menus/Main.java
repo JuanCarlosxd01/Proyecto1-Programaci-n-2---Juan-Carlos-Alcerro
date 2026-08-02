@@ -1,11 +1,13 @@
 
 package Menus;
 
+import java.awt.*;
 
 public class Main {
 
+    CardLayout transicion = new CardLayout();
     public static void main(String[] args) {
-        MenuDeInicio menu = new MenuDeInicio("VAMPIRE WARGAME");
+        VentanaPrincipal ventana = new VentanaPrincipal("VAMPIRE WARGAME");
     }
     
 }

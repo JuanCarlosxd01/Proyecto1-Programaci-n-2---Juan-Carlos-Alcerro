@@ -5,27 +5,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Menu extends JFrame{
+public class Menu extends JPanel{
     
     //Atributos en protected
     protected JPanel panel;
     protected BoxLayout columna;
-    protected CardLayout transicion;
-    protected JPanel contenedor;
     protected ArrayList<Usuario> usuarios = new ArrayList<>(); 
+    CardLayout transicion;
+    JPanel contenedor;
     
     //Constructor  que crea la ventana y le pone titulo
-    public Menu(String titulo){
-        panel = new JPanel();
-        setTitle(titulo);
-        setSize(800,800);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        transicion = new CardLayout();
-        contenedor = new JPanel(transicion);
+    public Menu(String titulo, JPanel contenedor, CardLayout transicion){
+        this.contenedor = contenedor;
+        this.transicion = transicion;
+        panel = new JPanel(); 
         
         columna = new BoxLayout(panel, BoxLayout.Y_AXIS);
+        panel.setLayout(columna);
+        
         panel.setLayout(columna);
         
         JLabel Titulo = new JLabel(titulo);
@@ -38,13 +35,13 @@ public class Menu extends JFrame{
       
     }
     //Funcion para crear botones
-    public static JButton Botones(BoxLayout columna, JPanel panel, String texto){
+    public static JButton Botones(BoxLayout columna, JPanel panel, String texto, int esp){
         Dimension d = new Dimension(300, 80);
         JButton boton = new JButton(texto);
         boton.setPreferredSize(d);
         boton.setMaximumSize(d);
         boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(Box.createVerticalStrut(60));
+        panel.add(Box.createVerticalStrut(esp));
         panel.add(boton);    
         
         return boton;
@@ -58,5 +55,13 @@ public class Menu extends JFrame{
     //Funcion para cambiar de paneles
     public void cambiarPanel(String nombre){
         transicion.show(contenedor, nombre);
+    }
+    
+    public JPanel crearPanel(String codigo){
+        JPanel principal = new JPanel();
+        BoxLayout columna = BoxLayouts(principal);
+        principal.setLayout(columna);
+        contenedor.add(principal, codigo);
+        return principal;
     }
 }
