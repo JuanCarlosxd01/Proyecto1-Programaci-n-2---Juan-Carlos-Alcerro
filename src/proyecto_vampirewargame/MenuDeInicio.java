@@ -3,11 +3,13 @@ package proyecto_vampirewargame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MenuDeInicio extends JFrame{
     
     private CardLayout transicion = new CardLayout();
     JPanel contenedor = new JPanel(transicion);
+    private ArrayList<Usuario> usuarios = new ArrayList<>(); 
     
     public MenuDeInicio(){      
         JPanel panel = new JPanel();
@@ -32,25 +34,26 @@ public class MenuDeInicio extends JFrame{
         JButton btnCrearJugador = Botones(columna, panel, "Crear Jugador");
         JButton btnSalir = Botones(columna, panel, "Salir");   
         
-        JPanel principalIniciarSesion = new JPanel();
-        BoxLayout columnaIniciarSesion = new BoxLayout(principalIniciarSesion, BoxLayout.Y_AXIS);
-        principalIniciarSesion.setLayout(columnaIniciarSesion);
-        contenedor.add(principalIniciarSesion, "Iniciar Sesion");
+        
         btnIniciarSesion.addActionListener(e -> {
+            JPanel principalIniciarSesion = new JPanel();
+            BoxLayout columnaIniciarSesion = new BoxLayout(principalIniciarSesion, BoxLayout.Y_AXIS);
+            principalIniciarSesion.setLayout(columnaIniciarSesion);
+            contenedor.add(principalIniciarSesion, "Iniciar Sesion");
             cambiarPanel("Iniciar Sesion");
-            IniciarSesion sesion = new IniciarSesion(this, principalIniciarSesion, "Iniciar Sesion", "Nombre de Usuario: ", "Contraseña: ", "Ingresar", "Regresar");
+            IniciarSesion sesion = new IniciarSesion(this, principalIniciarSesion, usuarios, "Iniciar Sesion", "Nombre de Usuario: ", "Contraseña: ", "Ingresar", "Regresar");
         });
         
-        JPanel principalCrearJugador = new JPanel();
-        BoxLayout columnaCrearJugador = new BoxLayout(principalCrearJugador, BoxLayout.Y_AXIS);
-        principalCrearJugador.setLayout(columnaCrearJugador);
-        contenedor.add(principalCrearJugador, "Crear Jugador");
         btnCrearJugador.addActionListener(e -> {
+            JPanel principalCrearJugador = new JPanel();
+             BoxLayout columnaCrearJugador = new BoxLayout(principalCrearJugador, BoxLayout.Y_AXIS);
+             principalCrearJugador.setLayout(columnaCrearJugador);
+            contenedor.add(principalCrearJugador, "Crear Jugador");
             cambiarPanel("Crear Jugador");
-            CrearJugador crear = new CrearJugador(this, principalCrearJugador);
+            CrearJugador crear = new CrearJugador(this, principalCrearJugador, usuarios);
         });
         btnSalir.addActionListener(e -> {
-            
+            System.exit(0);
         });
         
         add(contenedor);

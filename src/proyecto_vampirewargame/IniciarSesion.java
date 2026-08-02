@@ -3,11 +3,14 @@ package proyecto_vampirewargame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class IniciarSesion extends JPanel{
     
     MenuDeInicio ventana;
-    public IniciarSesion(MenuDeInicio ventana, JPanel principal, String txtTitulo, String txtIngCampo1, String txtIngCampo2, String txtBoton1, String txtBoton2){  
+    private String txtMensaje = "";
+    
+    public IniciarSesion(MenuDeInicio ventana, JPanel principal, ArrayList<Usuario> usuarios, String txtTitulo, String txtIngCampo1, String txtIngCampo2, String txtBoton1, String txtBoton2){  
         setSize(800,800);
         this.ventana = ventana; 
         
@@ -16,8 +19,10 @@ public class IniciarSesion extends JPanel{
         Titulo.setFont(new Font("Arial", Font.BOLD, 15));
         Titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        JPanel ingUsuario = campoTexto(txtIngCampo1);
-        JPanel ingContrasena = campoTexto(txtIngCampo2);
+        JTextField campoUsuario = new JTextField(15);
+        JPanel ingUsuario = campoTexto(txtIngCampo1, campoUsuario);
+        JTextField campoContrasena = new JTextField(15);
+        JPanel ingContrasena = campoTexto(txtIngCampo2, campoContrasena); 
         
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton btnIngresar = Botones(txtBoton1);
@@ -25,6 +30,23 @@ public class IniciarSesion extends JPanel{
         fila.add(btnIngresar);
         fila.add(Box.createHorizontalStrut(50));
         fila.add(btnRegresar);
+        JLabel mensaje = new JLabel(txtMensaje);
+        mensaje.setForeground(Color.red);
+        mensaje.setFont(new Font("Arial", Font.BOLD, 10));
+        mensaje.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        btnIngresar.addActionListener(e -> {
+            int numUsuarios = usuarios.size();
+            String leerUsuario = campoUsuario.getText();
+            String leerContrasena = campoContrasena.getText();
+            txtMensaje = accionarBoton(leerUsuario, leerContrasena, usuarios, numUsuarios - 1);  
+            mensaje.setText(txtMensaje);
+            campoUsuario.setText(""); //sujeto a cambios
+            campoContrasena.setText(""); // sujeto a cambios
+        });     
+        btnRegresar.addActionListener(e -> {
+            ventana.cambiarPanel("Menu de Inicio");
+        });
         
         principal.add(Box.createVerticalStrut(80));
         principal.add(Titulo);
@@ -33,16 +55,18 @@ public class IniciarSesion extends JPanel{
         principal.add(Box.createVerticalStrut(60));
         principal. add(ingContrasena);
         principal.add(Box.createVerticalStrut(60));
+        principal.add(mensaje);
+        principal.add(Box.createVerticalStrut(60));
         principal.add(fila);    
         setVisible(true); 
         
         
     }
     
-    public JPanel campoTexto(String texto){
+    public JPanel campoTexto(String texto, JTextField campoTxt){
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER));
         fila.add(new JLabel(texto));
-        fila.add(new JTextField(15));
+        fila.add(campoTxt);
         fila.add(Box.createHorizontalStrut(50));
       
         return fila;
@@ -55,6 +79,28 @@ public class IniciarSesion extends JPanel{
         boton.setMaximumSize(d);
         
         return boton;
+    }
+    
+    public String accionarBoton(String leerUsuario, String leerContrasena, ArrayList<Usuario> usuarios, int numUsuarios){
+        if(numUsuarios < 0){
+            return "No hay usuarios registrados en el juego";
+        }
+        
+        Usuario usuario = usuarios.get(numUsuarios);
+
+        if (usuario.getUsuario().equals(leerUsuario)) {
+            if (usuario.getContrasena().equals(leerContrasena)) {
+                 return "Ha ingresado correctamente.";
+            } else {
+                return "Contraseña incorrecta.";
+            }
+        }
+        
+        if(numUsuarios == 0){
+            return "Nombre de usuario incorrecto.";
+        }
+        
+        return accionarBoton(leerUsuario, leerContrasena, usuarios, numUsuarios - 1);
     }
 
 }
