@@ -1,13 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Menus;
 
-/**
- *
- * @author nosoy
- */
-public class MenuJugar {
+import java.awt.*;
+import javax.swing.*;
+
+public class MenuJugar extends Menu{
     
+    public MenuJugar(String texto, JPanel contenedor, CardLayout transicion){
+        super(texto, contenedor, transicion);
+        JButton btnNuevaPartida = Botones(columna, panel, "NUEVA PARTIDA", 60);
+        JButton btnRegresar = Botones(columna, panel, "REGRESAR", 60);
+        
+        add(panel);
+        
+        btnNuevaPartida.addActionListener(e -> {
+            cambiarPanel("NuevaPartida");
+        });
+        
+        btnRegresar.addActionListener(e -> {
+            cambiarPanel("MenuPrincipal");
+        });
+    }
 }

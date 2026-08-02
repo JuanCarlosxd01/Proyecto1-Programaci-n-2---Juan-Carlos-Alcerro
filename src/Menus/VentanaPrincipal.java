@@ -19,9 +19,6 @@ public class VentanaPrincipal extends JFrame{
         
         MenuDeInicio menu = new MenuDeInicio(titulo, contenedor, transicion);     
         contenedor.add(menu, "MenuDeInicio");
-        
-        MenuPrincipal menuP = new MenuPrincipal("MENU PRINCIPAL", contenedor, transicion);
-        contenedor.add(menuP, "MenuPrincipal");
 
         add(contenedor);
         transicion.show(contenedor, "MenuDeInicio");

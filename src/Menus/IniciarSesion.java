@@ -9,6 +9,7 @@ public class IniciarSesion extends JPanel{
     
     MenuDeInicio ventana;
     private String txtMensaje = "";
+    protected Usuario usuarioActivo;
     
     public IniciarSesion(MenuDeInicio ventana, JPanel principal, ArrayList<Usuario> usuarios, String txtTitulo, String txtIngCampo1, String txtIngCampo2, String txtBoton1, String txtBoton2){  
         setSize(800,800);
@@ -90,6 +91,9 @@ public class IniciarSesion extends JPanel{
 
         if (usuario.getUsuario().equals(leerUsuario)) {
             if (usuario.getContrasena().equals(leerContrasena)) {
+                usuarioActivo = usuario;
+                MenuPrincipal menuP = new MenuPrincipal(usuarioActivo, "MENU PRINCIPAL", ventana.contenedor, ventana.transicion);
+                ventana.contenedor.add(menuP, "MenuPrincipal");
                 ventana.cambiarPanel("MenuPrincipal");
                 return "Ha ingresado correctamente.";
             } else {
