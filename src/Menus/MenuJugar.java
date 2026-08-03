@@ -3,6 +3,7 @@ package Menus;
 
 import java.awt.*;
 import javax.swing.*;
+import Tablero.*;
 
 public class MenuJugar extends Menu{
     
@@ -14,7 +15,9 @@ public class MenuJugar extends Menu{
         add(panel);
         
         btnNuevaPartida.addActionListener(e -> {
-            cambiarPanel("NuevaPartida");
+            ventanaTablero tablero = new ventanaTablero(ventana); //Cambiar a clase de iniciar partida
+            contenedor.add(tablero, "Tablero");
+            cambiarPanel("Tablero");
         });
         
         btnRegresar.addActionListener(e -> {

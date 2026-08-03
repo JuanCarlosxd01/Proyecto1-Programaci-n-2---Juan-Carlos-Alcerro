@@ -4,17 +4,16 @@ package Tablero;
 import java.awt.*;
 import javax.swing.*;
 
-public class Ruleta {
+public class PanelHistorial {
     
-    
-    public Ruleta(JPanel panelPrincipal){
+    public PanelHistorial(JPanel panelPrincipal){
         GridLayout tablero = new GridLayout(6,6);
         JPanel panelCentro = new JPanel(tablero);
         panelCentro.setLayout(tablero);
         panelCentro.setPreferredSize(new Dimension(400,400));
         panelCentro.setBackground(Color.red);
         crearCasillas(panelCentro, 36);
-        panelPrincipal.add(panelCentro, BorderLayout.WEST);
+        panelPrincipal.add(panelCentro, BorderLayout.EAST);
     }
     
     public int crearCasillas(JPanel panelCentro, int num){

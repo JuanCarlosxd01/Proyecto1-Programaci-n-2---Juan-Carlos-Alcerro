@@ -3,6 +3,7 @@ package Menus;
 
 import java.awt.*;
 import javax.swing.*;
+import Tablero.*;
 
 public class VentanaPrincipal extends JFrame{
     
@@ -17,13 +18,15 @@ public class VentanaPrincipal extends JFrame{
         transicion = new CardLayout();
         contenedor = new JPanel(transicion);
         
-        MenuDeInicio menu = new MenuDeInicio(titulo, contenedor, transicion);     
+        MenuDeInicio menu = new MenuDeInicio(titulo, contenedor, transicion);    
+        menu.setVentana(this);
         contenedor.add(menu, "MenuDeInicio");
 
         add(contenedor);
         transicion.show(contenedor, "MenuDeInicio");
 
-        setVisible(true);
+        setVisible(true); 
+        
     }
     
 }

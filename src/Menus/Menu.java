@@ -13,8 +13,9 @@ public class Menu extends JPanel{
     protected ArrayList<Usuario> usuarios = new ArrayList<>(); 
     CardLayout transicion;
     JPanel contenedor;
+    protected static VentanaPrincipal ventana;
     
-    //Constructor  que crea la ventana y le pone titulo
+    //Constructor  que crea el panel y le pone titulo
     public Menu(String titulo, JPanel contenedor, CardLayout transicion){
         this.contenedor = contenedor;
         this.transicion = transicion;
@@ -63,5 +64,9 @@ public class Menu extends JPanel{
         principal.setLayout(columna);
         contenedor.add(principal, codigo);
         return principal;
+    }
+    
+    public  void setVentana(VentanaPrincipal ventana){
+        this.ventana = ventana;
     }
 }
