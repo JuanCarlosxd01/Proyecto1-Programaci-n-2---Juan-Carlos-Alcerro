@@ -9,11 +9,9 @@ public class Tablero {
     public Tablero(JPanel panelPrincipal){
         GridLayout tablero = new GridLayout(6,6);
         JPanel panelCentro = new JPanel(tablero);
-        panelCentro.setLayout(tablero);
-        panelCentro.setPreferredSize(new Dimension(900,900));
-        panelCentro.setBackground(Color.red);
-        crearCasillas(panelCentro, 36);
+        panelCentro.setBackground(Color.BLACK);     
         panelPrincipal.add(panelCentro, BorderLayout.CENTER);
+        crearCasillas(panelCentro, 36);
     }
     
     public int crearCasillas(JPanel panelCentro, int num){
@@ -25,4 +23,9 @@ public class Tablero {
         }
         return 0;
     }
+    
+    public void crearPieza(){
+        
+    }
+    
 }

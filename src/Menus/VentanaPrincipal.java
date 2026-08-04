@@ -3,7 +3,6 @@ package Menus;
 
 import java.awt.*;
 import javax.swing.*;
-import Tablero.*;
 
 public class VentanaPrincipal extends JFrame{
     

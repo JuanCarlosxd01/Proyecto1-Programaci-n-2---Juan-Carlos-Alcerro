@@ -22,6 +22,9 @@ public class ventanaTablero extends JPanel{
         PanelHistorial panelH = new PanelHistorial(panelPrincipal);
         Ruleta ruleta = new Ruleta(panelPrincipal);
         
+        ventana.getContentPane().removeAll();
         ventana.add(panelPrincipal);
+        ventana.revalidate();
+        ventana.repaint();
     }
 }

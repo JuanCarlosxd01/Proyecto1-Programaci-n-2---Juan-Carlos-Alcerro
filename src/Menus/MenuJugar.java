@@ -1,9 +1,9 @@
 
 package Menus;
 
+import Tablero.ventanaTablero;
 import java.awt.*;
 import javax.swing.*;
-import Tablero.*;
 
 public class MenuJugar extends Menu{
     
