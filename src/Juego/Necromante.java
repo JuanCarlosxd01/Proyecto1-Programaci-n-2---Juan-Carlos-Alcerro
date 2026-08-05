@@ -1,12 +1,14 @@
 
 package Juego;
 
+import javax.swing.*;
+import java.awt.*;
 
 public class Necromante extends Pieza{
     
     public Necromante(){
         super(4, 3, 1);
-        verImagen.setImage("Imagenes/necromante.png");
+        Imagen = new ImageIcon(getClass().getResource("/Imagenes/necromante.png"));
     }
     
     

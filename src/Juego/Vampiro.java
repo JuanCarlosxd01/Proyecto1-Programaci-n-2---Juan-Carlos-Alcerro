@@ -1,12 +1,14 @@
 
 package Juego;
 
+import javax.swing.*;
+import java.awt.*;
 
 public class Vampiro extends Pieza{
     
     public Vampiro(){
         super(3, 4 , 5);
-        verImagen.setImage("Imagenes/vampiro.png");
+        Imagen = new ImageIcon(getClass().getResource("/Imagenes/vampiro.png"));
     }
 
 

@@ -4,7 +4,7 @@ package Menus;
 import java.awt.*;
 import javax.swing.*;
 
-public class VentanaPrincipal extends JFrame{
+public final class VentanaPrincipal extends JFrame{
     
     CardLayout transicion;
     JPanel contenedor;

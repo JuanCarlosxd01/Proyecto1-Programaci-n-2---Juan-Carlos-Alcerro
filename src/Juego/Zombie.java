@@ -1,12 +1,14 @@
 
 package Juego;
 
+import javax.swing.*;
+import java.awt.*;
 
 public class Zombie extends Pieza{
     
     public Zombie(){
         super(1, 1, 0);
-        verImagen.setImage("Imagenes/zombie.png");
+        Imagen = new ImageIcon(getClass().getResource("/Imagenes/zombie.png"));
     }
 
 
