@@ -3,9 +3,11 @@ package Menus;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MenuDeInicio extends Menu{
     
+    ArrayList<Usuario> usuarios = new ArrayList<>(); 
     
     public MenuDeInicio(String texto,  JPanel contenedor, CardLayout transicion){ 
         super(texto, contenedor, transicion);

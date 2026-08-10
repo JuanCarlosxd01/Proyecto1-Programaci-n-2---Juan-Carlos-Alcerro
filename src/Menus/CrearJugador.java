@@ -24,7 +24,7 @@ public class CrearJugador extends IniciarSesion{
             Usuario usuario = new Usuario(leerUsuario, leerContrasena);
             usuarios.add(usuario);
             usuarioActivo = usuario;
-            MenuPrincipal menuP = new MenuPrincipal(usuarioActivo, "MENU PRINCIPAL", ventana.contenedor, ventana.transicion);
+            MenuPrincipal menuP = new MenuPrincipal(usuarioActivo, usuarios, "MENU PRINCIPAL", ventana.contenedor, ventana.transicion);
             ventana.contenedor.add(menuP, "MenuPrincipal");
             ventana.cambiarPanel("MenuPrincipal");
             return "Usuario creado correctamente";

@@ -6,9 +6,8 @@ import java.awt.*;
 
 public class Necromante extends Pieza{
     
-    public Necromante(){
-        super(4, 3, 1);
-        Imagen = new ImageIcon(getClass().getResource("/Imagenes/necromante.png"));
+    public Necromante(boolean habilitada, int posX, int posY){
+        super(4, 3, 1, habilitada, posX, posY);
     }
     
     

@@ -54,7 +54,7 @@ public class IniciarSesion extends JPanel{
         principal.add(Box.createVerticalStrut(80));
         principal.add(ingUsuario);
         principal.add(Box.createVerticalStrut(60));
-        principal. add(ingContrasena);
+        principal.add(ingContrasena);
         principal.add(Box.createVerticalStrut(60));
         principal.add(mensaje);
         principal.add(Box.createVerticalStrut(60));
@@ -93,7 +93,7 @@ public class IniciarSesion extends JPanel{
         if (usuario.getUsuario().equals(leerUsuario)) {
             if (usuario.getContrasena().equals(leerContrasena)) {
                 usuarioActivo = usuario;
-                MenuPrincipal menuP = new MenuPrincipal(usuarioActivo, "MENU PRINCIPAL", ventana.contenedor, ventana.transicion);
+                MenuPrincipal menuP = new MenuPrincipal(usuarioActivo, usuarios, "MENU PRINCIPAL", ventana.contenedor, ventana.transicion);
                 ventana.contenedor.add(menuP, "MenuPrincipal");
                 ventana.cambiarPanel("MenuPrincipal");
                 return "Ha ingresado correctamente.";

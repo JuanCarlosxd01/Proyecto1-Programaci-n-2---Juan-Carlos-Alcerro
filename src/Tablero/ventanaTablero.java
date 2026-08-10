@@ -7,27 +7,63 @@ import Menus.*;
 import Juego.*;
 
 
-public final class ventanaTablero extends JPanel{
+public final class VentanaTablero extends JPanel{
     
     JPanel panelPrincipal;
     BorderLayout border;
+    static JButton btnHabilidad;
+    static JButton btnAtacar;
+    static JButton btnMover;
     
-    public ventanaTablero(VentanaPrincipal ventana){
+    public VentanaTablero(VentanaPrincipal ventana, Usuario usuarioActivo, Usuario usuarioOponente){
         ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         border = new BorderLayout();
         panelPrincipal = new JPanel();
         panelPrincipal.setLayout(border);
-
-        Tablero tablero = new Tablero(panelPrincipal);
-        PanelInformacion panelI = new PanelInformacion(panelPrincipal);
-        PanelHistorial panelH = new PanelHistorial(panelPrincipal);
-        Ruleta ruleta = new Ruleta(panelPrincipal, tablero.getCasillas());
         
-        NuevaPartida partida = new NuevaPartida(tablero, panelI, panelH, ruleta);
+        JPanel panelRuleta = new JPanel();
+        panelRuleta.setLayout(new BoxLayout(panelRuleta, BoxLayout.Y_AXIS));
+        JPanel pBotones = new JPanel();
+        btnAtacar = Botones("ATACAR");
+        btnHabilidad = Botones("HABILIDAD"); 
+        btnMover = Botones("MOVER"); 
+        
+        Tablero tablero = new Tablero(panelPrincipal);
+        
+        PanelInformacion panelI = new PanelInformacion(panelPrincipal);
+        
+        PanelHistorial panelH = new PanelHistorial(panelPrincipal);  
+        
+        Partida partida = new Partida(tablero, usuarioActivo, usuarioOponente, btnAtacar, btnHabilidad, btnMover);
+        
+        pBotones.setLayout(new GridLayout(3, 1, 5, 5));
+        panelRuleta.add(partida.getRuleta());
+        panelRuleta.add(Box.createVerticalStrut(10));
+        panelRuleta.add(Box.createVerticalStrut(100));
+        panelRuleta.add(Box.createVerticalStrut(10));
+        panelRuleta.add(btnAtacar); 
+        panelRuleta.add(Box.createVerticalStrut(10));
+        panelRuleta.add(btnHabilidad); 
+        panelRuleta.add(Box.createVerticalStrut(10));
+        panelRuleta.add(btnMover); 
+        panelRuleta.add(Box.createVerticalStrut(80));
+        panelPrincipal.add(panelRuleta, BorderLayout.WEST);
         
         ventana.getContentPane().removeAll();
         ventana.add(panelPrincipal);
         ventana.revalidate();
         ventana.repaint();
     }
+    
+    public static JButton Botones(String texto){
+        Dimension d = new Dimension(120, 40);
+        JButton boton = new JButton(texto);
+        boton.setPreferredSize(d);
+        boton.setMinimumSize(d);
+        boton.setMaximumSize(d);
+        boton.setAlignmentX(Component.CENTER_ALIGNMENT);     
+        return boton;
+    }
+  
+   
 }

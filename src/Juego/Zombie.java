@@ -6,9 +6,8 @@ import java.awt.*;
 
 public class Zombie extends Pieza{
     
-    public Zombie(){
-        super(1, 1, 0);
-        Imagen = new ImageIcon(getClass().getResource("/Imagenes/zombie.png"));
+    public Zombie(boolean habilitada, int posX, int posY){
+        super(1, 1, 0, habilitada, posX, posY);
     }
 
 

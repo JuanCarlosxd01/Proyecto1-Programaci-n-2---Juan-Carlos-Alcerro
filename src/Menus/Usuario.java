@@ -63,4 +63,8 @@ public class Usuario {
                 "\nFecha de Ingreso:" + fechaIngreso.get(Calendar.DAY_OF_MONTH) + "/" + fechaIngreso.get(Calendar.MONTH) + "/" + fechaIngreso.get(Calendar.YEAR) +
                 "\nCuenta activa: " + activo;
     }
+    @Override
+    public String toString(){
+        return usuario;
+    } 
 }

@@ -6,9 +6,8 @@ import java.awt.*;
 
 public class Vampiro extends Pieza{
     
-    public Vampiro(){
-        super(3, 4 , 5);
-        Imagen = new ImageIcon(getClass().getResource("/Imagenes/vampiro.png"));
+    public Vampiro(boolean habilitada, int posX, int posY){
+        super(3, 4 , 5, habilitada, posX, posY);
     }
 
 

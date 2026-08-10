@@ -2,12 +2,13 @@
 package Menus;
 
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class MenuPrincipal extends Menu{
     private Usuario usuarioActivo;
     
-    public MenuPrincipal(Usuario usuarioActivo, String texto,  JPanel contenedor, CardLayout transicion){
+    public MenuPrincipal(Usuario usuarioActivo, ArrayList<Usuario> usuarios, String texto,  JPanel contenedor, CardLayout transicion){
         super(texto, contenedor, transicion);
         this.usuarioActivo = usuarioActivo;
         
@@ -24,7 +25,7 @@ public class MenuPrincipal extends Menu{
         JButton btnCerrarSesion = Botones(columna, panel, "CERRAR SESION", 40);  
         
         btnJugar.addActionListener(e -> {
-            MenuJugar menuJ = new MenuJugar("JUGAR", contenedor, transicion);
+            MenuJugar menuJ = new MenuJugar("JUGAR", contenedor, transicion, usuarios, usuarioActivo);
             contenedor.add(menuJ, "Jugar");
             cambiarPanel("Jugar");
         }); 

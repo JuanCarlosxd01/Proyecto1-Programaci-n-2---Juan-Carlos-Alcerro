@@ -5,12 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Menu extends JPanel{
+public abstract class Menu extends JPanel{
     
     //Atributos en protected
     protected JPanel panel;
     protected BoxLayout columna;
-    protected ArrayList<Usuario> usuarios = new ArrayList<>(); 
     CardLayout transicion;
     JPanel contenedor;
     protected static VentanaPrincipal ventana;

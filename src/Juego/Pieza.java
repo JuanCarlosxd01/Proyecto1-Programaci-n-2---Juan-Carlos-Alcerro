@@ -8,44 +8,69 @@ import java.awt.*;
 public abstract class Pieza {
     
     protected final int Ataque;
-    protected final int Vida;
-    protected final int Escudo;
-    ImageIcon Imagen;
-    int filaPieza;
-    int columnaPieza;
+    protected int Vida;
+    protected int Escudo;
+    boolean habilitada = false;
+    private int posX;
+    private int posY;
     
-    public Pieza(int Ataque, int Vida, int Escudo){
+    public Pieza(int Ataque, int Vida, int Escudo, boolean habilitada, int posX, int posY){
         this.Ataque = Ataque;
         this.Vida = Vida;
         this.Escudo = Escudo;
-    }
-    
-    public void figuraPieza(){
+        this.habilitada = habilitada;
+        this.posX = posX;
+        this.posY = posY;
         
     }
     
-    public int moverPieza(JButton[][] casillas, int fila, int columna){
-        filaPieza = fila;
-        columnaPieza = columna;
-        
-        if(fila < 0){
-            return 0;
-        }
-        if(fila >= 0){
-            return moverPieza(casillas, fila, columna - 1);
-        }
-        return moverPieza(casillas, fila - 1, columna);
-    }
     
     public abstract void ataqueEspecial();
     
     
-    
-    public void recibirAtaque(){
+    public int getPosX(){
+        return posX;
     }
     
-    public ImageIcon getImagen(){
-        return Imagen;
+    public int getPosY(){
+        return posY;
     }
+    
+    public void setPosX(int posX){
+        this.posX = posX;
+    }
+    
+    public void setPosY(int posY){
+        this.posY = posY;
+    }
+    
+    public int getAtaque(){
+        return Ataque;
+    }
+    
+    public int getVida(){
+        return Vida;
+    }
+    
+    public int getEscudo(){
+        return Escudo;
+    }
+    
+    public boolean getHabilitada(){
+        return habilitada;
+    }
+    
+    public void setVida(int Vida){
+        this.Vida = Vida;
+    }
+    
+    public void setEscudo(int Escudo){
+        this.Escudo = Escudo;
+    }
+    
+    public void setHabilitada(boolean habilitada){
+        this.habilitada = habilitada;
+    }
+        
     
 }
