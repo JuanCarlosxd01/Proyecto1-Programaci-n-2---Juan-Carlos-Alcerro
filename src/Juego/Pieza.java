@@ -7,7 +7,7 @@ import java.awt.*;
 
 public abstract class Pieza {
     
-    protected final int Ataque;
+    protected int Ataque;
     protected int Vida;
     protected int Escudo;
     boolean habilitada = false;
@@ -70,7 +70,6 @@ public abstract class Pieza {
     
     public void setHabilitada(boolean habilitada){
         this.habilitada = habilitada;
-    }
-        
+    }      
     
 }

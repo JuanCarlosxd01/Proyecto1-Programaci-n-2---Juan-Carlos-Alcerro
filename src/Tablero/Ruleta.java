@@ -9,6 +9,8 @@ import Juego.*;
 
 public class Ruleta extends JPanel{
     
+    private boolean[] arcosHabilitados = {true, true, true, true, true, true};
+    
     private double angulo = 0;
     private Timer timer;
     private double velocidad = (int)(Math.random()*200);
@@ -39,7 +41,6 @@ public class Ruleta extends JPanel{
         
         AffineTransform original = dibujar2.getTransform();
         dibujar2.rotate(Math.toRadians(angulo), centroX, centroY);
-     
         dibujar2.setColor(Color.white);
         dibujar2.fillArc(50, 50, 200, 200, 0, 60);
         dibujar2.setColor(color);

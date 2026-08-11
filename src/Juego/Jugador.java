@@ -3,6 +3,7 @@ package Juego;
 
 import Menus.*;
 import Tablero.*;
+import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,18 +11,18 @@ public class Jugador {
     
     private Usuario usuario;
     private boolean turno;
-    private Pieza[] piezas = new Pieza[6];
+    private ArrayList<Pieza> piezas = new ArrayList<>();
     
     public Jugador(Usuario usuario, boolean turno, Color color, int filaInicial){
         this.turno = turno;
         this.usuario = usuario;
 
-        piezas[0] = new HombreLobo(true, filaInicial,0);
-        piezas[1] = new Vampiro(true, filaInicial, 1);
-        piezas[2] = new Necromante(true, filaInicial, 2);  
-        piezas[3] = new Necromante(true, filaInicial, 3);
-        piezas[4] = new Vampiro(true, filaInicial, 4); 
-        piezas[5] = new HombreLobo(true, filaInicial, 5);
+        piezas.add(new HombreLobo(true, filaInicial,0));
+        piezas.add(new Vampiro(true, filaInicial, 1));
+        piezas.add(new Necromante(true, filaInicial, 2));  
+        piezas.add(new Necromante(true, filaInicial, 3));
+        piezas.add(new Vampiro(true, filaInicial, 4)); 
+        piezas.add(new HombreLobo(true, filaInicial, 5));
     }
     
     public boolean getTurno(){
@@ -34,11 +35,15 @@ public class Jugador {
     
     
     public Pieza getPieza(int indice){
-        return piezas[indice];
+        return piezas.get(indice);
     }
 
     public Usuario getUsuario() {
         return usuario;
+    }
+    
+    public ArrayList<Pieza> getPiezas() {
+        return piezas;
     }
     
 }
