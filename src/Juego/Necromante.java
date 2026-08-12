@@ -22,6 +22,7 @@ public class Necromante extends Pieza{
     private int posxZombie;
     private int posyZombie;
     private Zombie zombie = null;
+    private int num;
     
     public Necromante(boolean habilitada, int posX, int posY){
         super(4, 3, 1, habilitada, posX, posY);
@@ -31,18 +32,15 @@ public class Necromante extends Pieza{
     public void ataqueEspecial(){
         if(habilidad.equals("ATAQUE LANZA")){
             Ataque = Ataque/2;
-            ataqueLanza();
+            ataqueLanza("ATAQUE");
         }
         else if(habilidad.equals("INVOCAR ZOMBIE")){
-            invocarZombie();
-        }
-        else if(habilidad.equals("ATAQUE ZOMBIE")){
-            ataqueZombie();
+            invocarZombie(num);
         }
     }
     
-    public void ataqueLanza(){
-        int[][] casillasAdyacentes = new int[16][2];
+    public void ataqueLanza(String accion){
+        int[][] casillasAdyacentes = new int[movimientos.length][2];
         for (int i = 0; i < movimientos.length; i++) {
             casillasAdyacentes[i][0] = movimientos[i][0] + getPosX();
             casillasAdyacentes[i][1] = movimientos[i][1] + getPosY();
@@ -52,10 +50,19 @@ public class Necromante extends Pieza{
             int columnaTemp = casillasAdyacentes[i][1];
             if(filaTemp >= 0 && filaTemp < casillas.length && columnaTemp >= 0 && columnaTemp < casillas.length){
                 if(casillas[filaTemp][columnaTemp].getIcon() != null){
-                    for (int j = 0; j < 6; j++) {
+                    for (int j = 0; j < oponente.getPiezas().size(); j++) {
                         if(filaTemp == oponente.getPieza(j).getPosX() && columnaTemp == oponente.getPieza(j).getPosY() && oponente.getPieza(j).getHabilitada()){
-                            casillas[filaTemp][columnaTemp].setEnabled(true);
-                            casillas[filaTemp][columnaTemp].setBackground(Color.RED);  
+                            if(accion.equals("ATAQUE")){
+                                casillas[filaTemp][columnaTemp].setEnabled(true);
+                                casillas[filaTemp][columnaTemp].setOpaque(true);
+                                casillas[filaTemp][columnaTemp].setContentAreaFilled(true);
+                                casillas[filaTemp][columnaTemp].setBorderPainted(true);
+                                casillas[filaTemp][columnaTemp].setBackground(Color.RED);  
+                            }
+                            else if(accion.equals("OPCIONES")){
+                                Partida.hayOpciones = true;
+                            }
+                            
                         }
                     }
                 }
@@ -64,14 +71,10 @@ public class Necromante extends Pieza{
                 
     }
     
-    public void invocarZombie(){
+    public void invocarZombie(int num){
         zombie = new Zombie(true, posxZombie, posyZombie);
-        ponerImagen(casillas[posxZombie][posyZombie], "/Imagenes/Zombie.png");
+        ponerImagen(casillas[posxZombie][posyZombie], "/Imagenes/Zombie"+num+".png");
                 
-    }
-    
-    public void ataqueZombie(){
-        
     }
     
     public void setHabilidad(String habilidad){
@@ -99,9 +102,15 @@ public class Necromante extends Pieza{
         Image icono = imagen.getImage();
         Image escalada = icono.getScaledInstance(150, 150,Image.SCALE_SMOOTH);
         casilla.setIcon(new ImageIcon(escalada));
+        casilla.setDisabledIcon(new ImageIcon(escalada));
     }
     
     public Zombie getZombie(){
         return zombie;
     }
+    
+    public void setNum(int num){
+        this.num = num;
+    }
+
 }

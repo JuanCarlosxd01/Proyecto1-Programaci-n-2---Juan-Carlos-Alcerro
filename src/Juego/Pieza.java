@@ -72,4 +72,8 @@ public abstract class Pieza {
         this.habilitada = habilitada;
     }      
     
+    public void setAtaque(int Ataque){
+        this.Ataque = Ataque;
+    }
+    
 }

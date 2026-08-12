@@ -39,6 +39,9 @@ public class HombreLobo extends Pieza{
                 }
                 if(casillas[filaTemp][columnaTemp].getIcon() == null){
                     casillas[filaTemp][columnaTemp].setEnabled(true);
+                    casillas[filaTemp][columnaTemp].setOpaque(true);
+                    casillas[filaTemp][columnaTemp].setContentAreaFilled(true);
+                    casillas[filaTemp][columnaTemp].setBorderPainted(true);
                     casillas[filaTemp][columnaTemp].setBackground(Color.YELLOW);
                 }
             }

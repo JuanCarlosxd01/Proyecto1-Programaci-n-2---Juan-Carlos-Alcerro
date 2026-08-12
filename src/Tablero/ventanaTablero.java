@@ -14,7 +14,15 @@ public final class VentanaTablero extends JPanel{
     static JButton btnHabilidad;
     static JButton btnAtacar;
     static JButton btnMover;
-    static JPanel panelRuleta = new JPanel();
+    static JPanel panelRuleta = new JPanel(){
+        private Image fondo = new ImageIcon(getClass().getResource("/Imagenes/PanelRuleta.jpeg")).getImage();
+        
+        @Override
+        protected void paintComponent(Graphics g){
+            super.paintComponent(g);
+            g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
     
     public VentanaTablero(VentanaPrincipal ventana, Usuario usuarioActivo, Usuario usuarioOponente){
         ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);

@@ -37,6 +37,7 @@ public class Partida {
     JButton btnInvocar;
     JButton btnAtaqueZombie;
     boolean ataqueZombie = false;
+    static boolean hayOpciones = false;
 
     public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover){
         ruleta = new Ruleta(Color.GRAY);
@@ -48,7 +49,6 @@ public class Partida {
         btnAtaqueDistancia = VentanaTablero.Botones("⚔");
         btnInvocar = VentanaTablero.Botones("☠");
         btnAtaqueZombie = VentanaTablero.Botones("Z");
-        accionarHabilidadesNecromante();
         
         jugador1 = new Jugador(usuarioActivo, false, Color.BLACK, 0);
         jugador2 = new Jugador(usuarioOponente, false, Color.gray, 5);
@@ -86,9 +86,13 @@ public class Partida {
     }   
     
     public void terminarTurno(){
-        numPieza = 0;
+        btnInvocar.setEnabled(true);
+        btnAtaqueDistancia.setEnabled(true);
+        btnAtaqueZombie.setEnabled(true);
+        numPieza = -1;
         xVieja = 0;
         yVieja = 0;
+        hayOpciones = false;
         habilidadActiva = false;
         invocar = false;
         ataqueZombie = false;
@@ -122,6 +126,7 @@ public class Partida {
                 xTemp1 = jugadorTurno.getPieza(0).getPosX();
                 yTemp1 = jugadorTurno.getPieza(0).getPosY();
                 casillas[xTemp1][yTemp1].setEnabled(true);
+                aparecerBotones(xTemp1, yTemp1);
                 casillas[xTemp1][yTemp1].setBackground(Color.GREEN); 
                 hayPieza = true;
             }
@@ -129,6 +134,7 @@ public class Partida {
                 xTemp2 = jugadorTurno.getPieza(5).getPosX();
                 yTemp2 = jugadorTurno.getPieza(5).getPosY();
                 casillas[xTemp2][yTemp2].setEnabled(true);
+                aparecerBotones(xTemp2, yTemp2);
                 casillas[xTemp2][yTemp2].setBackground(Color.GREEN); 
                 hayPieza = true;
             }  
@@ -140,6 +146,7 @@ public class Partida {
                 xTemp1 = jugadorTurno.getPieza(1).getPosX();
                 yTemp1 = jugadorTurno.getPieza(1).getPosY();
                 casillas[xTemp1][yTemp1].setEnabled(true);
+                aparecerBotones(xTemp1, yTemp1);
                 casillas[xTemp1][yTemp1].setBackground(Color.GREEN);
                 hayPieza = true;
             }
@@ -147,6 +154,7 @@ public class Partida {
                 xTemp2 = jugadorTurno.getPieza(4).getPosX();
                 yTemp2 = jugadorTurno.getPieza(4).getPosY();
                 casillas[xTemp2][yTemp2].setEnabled(true);
+                aparecerBotones(xTemp2, yTemp2);
                 casillas[xTemp2][yTemp2].setBackground(Color.GREEN);
                 hayPieza = true;
             }  
@@ -158,6 +166,7 @@ public class Partida {
                 xTemp1 = jugadorTurno.getPieza(2).getPosX();
                 yTemp1 = jugadorTurno.getPieza(2).getPosY();
                 casillas[xTemp1][yTemp1].setEnabled(true);
+                aparecerBotones(xTemp1, yTemp1);
                 casillas[xTemp1][yTemp1].setBackground(Color.GREEN); 
                 hayPieza = true;
             }
@@ -165,6 +174,7 @@ public class Partida {
                 xTemp2 = jugadorTurno.getPieza(3).getPosX();
                 yTemp2 = jugadorTurno.getPieza(3).getPosY();
                 casillas[xTemp2][yTemp2].setEnabled(true);
+                aparecerBotones(xTemp2, yTemp2);
                 casillas[xTemp2][yTemp2].setBackground(Color.GREEN); 
                 hayPieza = true;
             }  
@@ -190,31 +200,42 @@ public class Partida {
                 if(opcion.equals("MOVER")){
                     if(casillas[filaTemp][columnaTemp].getIcon() == null ){
                         casillas[filaTemp][columnaTemp].setEnabled(true);
+                        aparecerBotones(filaTemp, columnaTemp);
                         casillas[filaTemp][columnaTemp].setBackground(Color.YELLOW);  
                         moverPieza = true;
                         xVieja = fila;
                         yVieja = columna;
                     }    
                 }
-                else if(opcion.equals("ATACAR")){
+                else if(opcion.equals("ATACAR") || opcion.equals("OPCIONES")){
                     if(casillas[filaTemp][columnaTemp].getIcon() != null){
                         for (int j = 0; j < jugadorRival.getPiezas().size(); j++) {
                             if(filaTemp == jugadorRival.getPieza(j).getPosX() && columnaTemp == jugadorRival.getPieza(j).getPosY() && jugadorRival.getPieza(j).getHabilitada()){
-                                casillas[filaTemp][columnaTemp].setEnabled(true);
-                                casillas[filaTemp][columnaTemp].setBackground(Color.RED); 
-                                atacarEnemigo = true; 
+                                if(opcion.equals("ATACAR")){
+                                    casillas[filaTemp][columnaTemp].setEnabled(true);
+                                    aparecerBotones(filaTemp, columnaTemp);
+                                    casillas[filaTemp][columnaTemp].setBackground(Color.RED); 
+                                    atacarEnemigo = true; 
+                                }
+                                else if(opcion.equals("OPCIONES")){
+                                    hayOpciones = true;
+                                }
+                                
                             }
                         }
                     }   
                 }
             }
         }
-        piezasSeleccionadas = false;
+        if(!opcion.equals("OPCIONES") ){
+            piezasSeleccionadas = false;
+        }
     }  
 
     public void moverPieza(int viejaFila, int viejaColumna, int nuevaFila, int nuevaColumna, int numPieza){  
             
         casillas[nuevaFila][nuevaColumna].setIcon(casillas[viejaFila][viejaColumna].getIcon());
+        casillas[nuevaFila][nuevaColumna].setDisabledIcon(casillas[viejaFila][viejaColumna].getIcon());
         casillas[viejaFila][viejaColumna].setIcon(null);
         jugadorTurno.getPieza(numPieza).setPosX(nuevaFila);
         jugadorTurno.getPieza(numPieza).setPosY(nuevaColumna);
@@ -238,9 +259,20 @@ public class Partida {
                             yPieza = columnaTemp;
                             numPieza = pieza;
                             casillas[filaTemp][columnaTemp].setBackground(Color.ORANGE);
+                            tablero.inhabilitarCasillas(5, 5);
+                            aparecerBotones(filaTemp, columnaTemp);
+                            hayOpciones = false;
+                            casillasDisponibles(xPieza, yPieza, "OPCIONES");
                             botones[0].setEnabled(true);
                             botones[1].setEnabled(true);
                             botones[2].setEnabled(true);
+                            if(!hayOpciones){
+                                botones[0].setEnabled(false);
+                            }
+                            if(!hayOpciones && jugadorTurno.getPieza(numPieza) instanceof Vampiro){
+                                botones[1].setEnabled(false);
+                            }
+                            
                         }
                     }
                     else if(numPieza != -1 && moverPieza){
@@ -258,6 +290,12 @@ public class Partida {
                     else if(numPieza != -1 && invocar){
                         nSeleccionado.setPosxZombie(filaTemp);
                         nSeleccionado.setPosyZombie(columnaTemp);
+                        if(jugadorTurno == jugador1){
+                            nSeleccionado.setNum(1);
+                        }
+                        else{
+                            nSeleccionado.setNum(2);
+                        }
                         nSeleccionado.ataqueEspecial();
                         jugadorTurno.getPiezas().add(nSeleccionado.getZombie());
                         quitarBotones();
@@ -282,10 +320,16 @@ public class Partida {
     
     public void clickBotones(){
         botones[0].addActionListener(e -> {
+            botones[0].setEnabled(false);
+            botones[1].setEnabled(false);
+            botones[2].setEnabled(false);
             casillasDisponibles(xPieza, yPieza, "ATACAR"); 
         });
-
+        
         botones[1].addActionListener(e -> {
+            botones[0].setEnabled(false);
+            botones[1].setEnabled(false);
+            botones[2].setEnabled(false);
             if(jugadorTurno.getPieza(numPieza) instanceof HombreLobo){
                 if (piezasSeleccionadas) {
                     HombreLobo pieza = (HombreLobo)(jugadorTurno.getPieza(numPieza));
@@ -300,6 +344,8 @@ public class Partida {
             else if(jugadorTurno.getPieza(numPieza) instanceof Necromante){
                 nSeleccionado = (Necromante)(jugadorTurno.getPieza(numPieza));
                 nSeleccionado.setCasillas(casillas);
+                 nSeleccionado.setOponente(jugadorRival);
+                accionarHabilidadesNecromante();
                 agregarBotones();
             }
             
@@ -312,6 +358,9 @@ public class Partida {
         });
 
         botones[2].addActionListener(e -> {
+            botones[0].setEnabled(false);
+            botones[1].setEnabled(false);
+            botones[2].setEnabled(false);
             if(piezasSeleccionadas){
                 casillasDisponibles(xPieza, yPieza, "MOVER"); 
             }
@@ -321,36 +370,51 @@ public class Partida {
     
     public void hacerAtaque(int xEnemigo, int yEnemigo, int numPieza){
         int ataque = jugadorTurno.getPieza(numPieza).getAtaque();
-        for (int i = 0; i < jugadorTurno.getPiezas().size(); i++) {
+        for (int i = 0; i < jugadorRival.getPiezas().size(); i++) {
             int x = jugadorRival.getPieza(i).getPosX();
             int y = jugadorRival.getPieza(i).getPosY();
             if(xEnemigo == x && yEnemigo == y){
-                if(jugadorRival.getPieza(i).getEscudo() <= 0){
-                    jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - ataque);
-                    System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
-                    System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
-                }
-                else{
-                    int escudo = jugadorRival.getPieza(i).getEscudo();
-                    if(escudo >= ataque){
-                        jugadorRival.getPieza(i).setEscudo(escudo - ataque);
+                if(!(jugadorTurno.getPieza(numPieza) instanceof Necromante)){
+                    if(jugadorRival.getPieza(i).getEscudo() <= 0){
+                        jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - ataque);
+                        System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
+                        System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
                     }
                     else{
-                        int residuo = ataque - escudo;
-                        jugadorRival.getPieza(i).setEscudo(0);
-                        jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - residuo);
-                    }    
-                    System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
-                    System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
+                        int escudo = jugadorRival.getPieza(i).getEscudo();
+                        if(escudo >= ataque){
+                            jugadorRival.getPieza(i).setEscudo(escudo - ataque);
+                        }
+                        else{
+                            int residuo = ataque - escudo;
+                            jugadorRival.getPieza(i).setEscudo(0);
+                            jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - residuo);
+                        }    
+                        System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
+                        System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
+                    }
+                    if(jugadorRival.getPieza(i).getVida() <= 0){
+                        jugadorRival.getPieza(i).setVida(0);
+                        jugadorRival.getPieza(i).setHabilitada(false);
+                        casillas[x][y].setIcon(null);
+                        System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
+                        System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
+                    }
+                    break;
                 }
-                if(jugadorRival.getPieza(i).getVida() <= 0){
-                    jugadorRival.getPieza(i).setVida(0);
-                    jugadorRival.getPieza(i).setHabilitada(false);
-                    casillas[x][y].setIcon(null);
-                    System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
-                    System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
+                else if(jugadorTurno.getPieza(numPieza) instanceof Necromante){
+                    jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - ataque);
+                     if(jugadorRival.getPieza(i).getVida() <= 0){
+                        jugadorRival.getPieza(i).setVida(0);
+                        jugadorRival.getPieza(i).setHabilitada(false);
+                        casillas[x][y].setIcon(null);
+                        System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
+                        System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
+                    }
+                     jugadorTurno.getPieza(numPieza).setAtaque(ataque * 2);
+                     break;
                 }
-                break;
+                
             }
         }
         tablero.inhabilitarCasillas(5, 5);  
@@ -388,27 +452,49 @@ public class Partida {
     }
     
     public void accionarHabilidadesNecromante(){
+        hayOpciones = false;
+        nSeleccionado.ataqueLanza("OPCIONES");
+        if(!hayOpciones){
+            btnAtaqueDistancia.setEnabled(false);
+        }
         btnAtaqueDistancia.addActionListener(e ->{
+            btnInvocar.setEnabled(false);
+            btnAtaqueDistancia.setEnabled(false);
+            btnAtaqueZombie.setEnabled(false);
             nSeleccionado.setOponente(jugadorRival);
             nSeleccionado.setHabilidad("ATAQUE LANZA");
             habilidadActiva = false;
             nSeleccionado.ataqueEspecial();
-            quitarBotones();
+            atacarEnemigo = true;
+            piezasSeleccionadas = false;
+            casillas[xPieza][yPieza].setOpaque(false);
+            casillas[xPieza][yPieza].setContentAreaFilled(false);
+            casillas[xPieza][yPieza].setBorderPainted(false);
+            casillas[xPieza][yPieza].setEnabled(false);
         });
         
         btnInvocar.addActionListener(e -> {
+            btnInvocar.setEnabled(false);
+            btnAtaqueDistancia.setEnabled(false);
+            btnAtaqueZombie.setEnabled(false);
             nSeleccionado.setHabilidad("INVOCAR ZOMBIE");
             piezasSeleccionadas = false;
             casillasSinPiezas();
             invocar = true;
         });
-        
+        hayOpciones = false;
+        seleccionarZombies("OPCIONES");
+        if(!hayOpciones){
+            btnAtaqueZombie.setEnabled(false);
+        }
         btnAtaqueZombie.addActionListener(e -> {
+            btnInvocar.setEnabled(false);
+            btnAtaqueDistancia.setEnabled(false);
+            btnAtaqueZombie.setEnabled(false);
             ataqueZombie = true;
             piezasSeleccionadas = false;
-            nSeleccionado.setHabilidad("ATAQUE ZOMBIE");
             tablero.inhabilitarCasillas(5, 5);
-            seleccionarZombies();
+            seleccionarZombies("ATAQUE");
             nSeleccionado.ataqueEspecial();
         });
     }
@@ -418,19 +504,28 @@ public class Partida {
             for (int j = 0; j < casillas.length; j++) {
                 if(casillas[i][j].getIcon() == null){
                     casillas[i][j].setEnabled(true);
+                    aparecerBotones(i, j);
                     casillas[i][j].setBackground(new Color(220, 220, 220)); 
                 }
             }
         }
     }
     
-    public void seleccionarZombies(){
+    public void seleccionarZombies(String opcion){
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas[0].length; j++) {
                 for (int k = 0; k < jugadorTurno.getPiezas().size(); k++) {
-                    if(i == jugadorTurno.getPieza(k).getPosX() && j == jugadorTurno.getPieza(k).getPosY() && jugadorTurno.getPieza(k) instanceof Zombie){
-                        casillas[i][j].setEnabled(true);
-                        casillas[i][j].setBackground(Color.GREEN); 
+                    if(Math.max(Math.abs(jugadorTurno.getPieza(k).getPosX() - nSeleccionado.getPosX()), Math.abs(jugadorTurno.getPieza(k).getPosY() - nSeleccionado.getPosY()))  >= 3){
+                        if(i == jugadorTurno.getPieza(k).getPosX() && j == jugadorTurno.getPieza(k).getPosY() && jugadorTurno.getPieza(k) instanceof Zombie){
+                            if(opcion.equals("ATAQUE")){
+                                casillas[i][j].setEnabled(true);
+                                aparecerBotones(i, j);
+                                casillas[i][j].setBackground(Color.GREEN); 
+                            }
+                            else if(opcion.equals("OPCIONES")){
+                                hayOpciones = true;
+                            }
+                        }
                     }
                 }
             }
@@ -447,5 +542,10 @@ public class Partida {
         terminarTurno();
     }
     
+    public void aparecerBotones(int x, int y){
+        casillas[x][y].setOpaque(true);
+        casillas[x][y].setContentAreaFilled(true);
+        casillas[x][y].setBorderPainted(true);
+    }
     
 }

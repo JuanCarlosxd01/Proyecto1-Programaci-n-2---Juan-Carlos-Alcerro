@@ -8,7 +8,7 @@ import java.awt.geom.AffineTransform;
 import Juego.*;
 
 public class Ruleta extends JPanel{
-    
+   
     private boolean[] arcosHabilitados = {true, true, true, true, true, true};
     
     private double angulo = 0;
@@ -27,6 +27,7 @@ public class Ruleta extends JPanel{
     private boolean puedeGirar = true;
     
     public Ruleta(Color color){ 
+        setOpaque(false);
         this.color = color;
         setPreferredSize(new Dimension(288, 300)); 
         timer();
