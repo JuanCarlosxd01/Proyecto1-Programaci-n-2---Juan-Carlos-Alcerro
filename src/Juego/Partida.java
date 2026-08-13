@@ -24,6 +24,7 @@ public class Partida {
     boolean atacarEnemigo = false;
     boolean invocar = false;
     Necromante nSeleccionado = null;
+    boolean lanzaN = false;
     
     int xVieja;
     int yVieja;
@@ -38,9 +39,14 @@ public class Partida {
     JButton btnAtaqueZombie;
     boolean ataqueZombie = false;
     static boolean hayOpciones = false;
+    boolean hayZombie = false;
+    PanelHistorial panelH;
+    int xEnemiga;
+    int yEnemiga;
 
-    public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover){
+    public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover, PanelHistorial panelH){
         ruleta = new Ruleta(Color.GRAY);
+        this.panelH = panelH;
         this.tablero = tablero;
         casillas = tablero.getCasillas();
         botones[0] = btnAtacar;
@@ -65,7 +71,8 @@ public class Partida {
         botones[0].setEnabled(false);
         botones[1].setEnabled(false);
         botones[2].setEnabled(false);
-        ruleta.habilitarRulera();
+        ruleta.habilitarRuleta();
+        panelH.agregarMovimiento("Es turno del jugador: " + jugadorTurno.getUsuario().getUsuario() + ".");
         
         jugadorTurno.setTurno(true);
         if(jugadorTurno == jugador1){
@@ -92,10 +99,12 @@ public class Partida {
         numPieza = -1;
         xVieja = 0;
         yVieja = 0;
+        lanzaN = false;
         hayOpciones = false;
         habilidadActiva = false;
         invocar = false;
         ataqueZombie = false;
+        hayZombie = false;
         jugadorTurno.setTurno(false);
         cambiarTurno();
        
@@ -241,6 +250,8 @@ public class Partida {
         jugadorTurno.getPieza(numPieza).setPosY(nuevaColumna);
         tablero.inhabilitarCasillas(5, 5);     
         
+        
+        jugadaMensaje("MOVER");
         moverPieza = false;
         
         terminarTurno();
@@ -279,15 +290,20 @@ public class Partida {
                         moverPieza(xVieja, yVieja, filaTemp, columnaTemp, numPieza); 
                     }
                     else if(numPieza != -1 && atacarEnemigo){
+                        xEnemiga = filaTemp;
+                        yEnemiga = columnaTemp;
                         if(!habilidadActiva){
                             hacerAtaque(filaTemp, columnaTemp, numPieza);
                             quitarBotones();
                         }
                         else {
                             jugadorTurno.getPieza(numPieza).ataqueEspecial();
+                            terminarTurno();
                         }
                     }
                     else if(numPieza != -1 && invocar){
+                        xEnemiga = filaTemp;
+                        yEnemiga = columnaTemp;
                         nSeleccionado.setPosxZombie(filaTemp);
                         nSeleccionado.setPosyZombie(columnaTemp);
                         if(jugadorTurno == jugador1){
@@ -297,10 +313,12 @@ public class Partida {
                             nSeleccionado.setNum(2);
                         }
                         nSeleccionado.ataqueEspecial();
+                        jugadaMensaje("HABILIDAD ESPECIAL");
                         jugadorTurno.getPiezas().add(nSeleccionado.getZombie());
                         quitarBotones();
                     }
                     else if(numPieza != -1 && ataqueZombie){
+                        numPieza = piezaCasilla(xEnemiga, yEnemiga);
                         casillasDisponibles(filaTemp, columnaTemp, "ATACAR"); 
                     }
                 });
@@ -326,11 +344,12 @@ public class Partida {
             casillasDisponibles(xPieza, yPieza, "ATACAR"); 
         });
         
-        botones[1].addActionListener(e -> {
+        botones[1].addActionListener(e -> { 
             botones[0].setEnabled(false);
             botones[1].setEnabled(false);
             botones[2].setEnabled(false);
             if(jugadorTurno.getPieza(numPieza) instanceof HombreLobo){
+                jugadaMensaje("HABILIDAD ESPECIAL");
                 if (piezasSeleccionadas) {
                     HombreLobo pieza = (HombreLobo)(jugadorTurno.getPieza(numPieza));
                     pieza.setCasillas(casillas);
@@ -350,6 +369,7 @@ public class Partida {
             }
             
             else if(jugadorTurno.getPieza(numPieza) instanceof Vampiro){
+                jugadaMensaje("HABILIDAD ESPECIAL");
                 Vampiro pieza = (Vampiro)(jugadorTurno.getPieza(numPieza)); 
                 pieza.setPartida(this);
                 casillasDisponibles(xPieza, yPieza, "ATACAR"); 
@@ -374,11 +394,9 @@ public class Partida {
             int x = jugadorRival.getPieza(i).getPosX();
             int y = jugadorRival.getPieza(i).getPosY();
             if(xEnemigo == x && yEnemigo == y){
-                if(!(jugadorTurno.getPieza(numPieza) instanceof Necromante)){
+                if(!lanzaN){
                     if(jugadorRival.getPieza(i).getEscudo() <= 0){
                         jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - ataque);
-                        System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
-                        System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
                     }
                     else{
                         int escudo = jugadorRival.getPieza(i).getEscudo();
@@ -390,26 +408,28 @@ public class Partida {
                             jugadorRival.getPieza(i).setEscudo(0);
                             jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - residuo);
                         }    
-                        System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
-                        System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
                     }
                     if(jugadorRival.getPieza(i).getVida() <= 0){
                         jugadorRival.getPieza(i).setVida(0);
+                    }
+                    jugadaMensaje("ATAQUE");
+                    
+                    if(jugadorRival.getPieza(i).getVida() <= 0){
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
-                        System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
-                        System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
+                        jugadaMensaje("MATAR PIEZA");
                     }
                     break;
                 }
-                else if(jugadorTurno.getPieza(numPieza) instanceof Necromante){
+                else if(lanzaN){
                     jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - ataque);
+                    jugadaMensaje("HABILIDAD ESPECIAL");
                      if(jugadorRival.getPieza(i).getVida() <= 0){
                         jugadorRival.getPieza(i).setVida(0);
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
-                        System.out.println("Vida: " + jugadorRival.getPieza(i).getVida());
-                        System.out.println("Escudo: " +jugadorRival.getPieza(i).getEscudo());
+                        jugadaMensaje("MATAR PIEZA");
+                        
                     }
                      jugadorTurno.getPieza(numPieza).setAtaque(ataque * 2);
                      break;
@@ -419,7 +439,6 @@ public class Partida {
         }
         tablero.inhabilitarCasillas(5, 5);  
         atacarEnemigo = false;
-        terminarTurno();
     }
     
     
@@ -463,6 +482,7 @@ public class Partida {
             btnAtaqueZombie.setEnabled(false);
             nSeleccionado.setOponente(jugadorRival);
             nSeleccionado.setHabilidad("ATAQUE LANZA");
+            lanzaN = true;
             habilidadActiva = false;
             nSeleccionado.ataqueEspecial();
             atacarEnemigo = true;
@@ -484,7 +504,8 @@ public class Partida {
         });
         hayOpciones = false;
         seleccionarZombies("OPCIONES");
-        if(!hayOpciones){
+        hayZombies();
+        if(!hayOpciones || !hayZombie){
             btnAtaqueZombie.setEnabled(false);
         }
         btnAtaqueZombie.addActionListener(e -> {
@@ -547,5 +568,66 @@ public class Partida {
         casillas[x][y].setContentAreaFilled(true);
         casillas[x][y].setBorderPainted(true);
     }
+    
+    public void jugadaMensaje(String accion){
+        Pieza p1 = jugadorTurno.getPieza(numPieza);
+        Pieza p2 = null;
+        for (int i = 0; i < jugadorRival.getPiezas().size(); i++) {
+            if(jugadorRival.getPieza(i).getPosX() == xEnemiga && jugadorRival.getPieza(i).getPosY() == yEnemiga){
+                p2 = jugadorRival.getPieza(i);
+            }
+        }
+        switch (accion){
+            case "ATAQUE":
+                panelH.agregarMovimiento("Se atacó la pieza "  + p2 + " y se le quitaron " 
+                + p1.getAtaque() + "  puntos; le quedan " + p2.getEscudo() + " puntos de escudo y " + p2.getVida() + " de vida.");
+                break;
+                
+            case "MOVER":
+                panelH.agregarMovimiento("La pieza " + p1 + " se ha desplazado hacia (" + p1.getPosX() + ", " + p1.getPosY() + ").");
+                break;
+                
+            case "HABILIDAD ESPECIAL":
+                if(p1 instanceof HombreLobo){
+                    panelH.agregarMovimiento("El Hombre Lobo ha usado su HABILIDAD ESPECIAL");
+                }
+                else if(p1 instanceof Vampiro){
+                    panelH.agregarMovimiento("El Vampiro ha usado su HABILIDAD ESPECIAL");
+                }
+                else if(p1 instanceof Necromante){
+                    switch (nSeleccionado.getHabilidad()){
+                        case "ATAQUE LANZA":
+                            panelH.agregarMovimiento("El Necromante ha usado su ATAQUE LANZA y atacó la pieza "  + p2 + " la cual ha restado 2 de vida.");
+                            break;
+                        case "INVOCAR ZOMBIE":
+                            panelH.agregarMovimiento("El Necromante ha invocado un zombie en (" + xEnemiga + ", " + yEnemiga + ").");
+                            break;
+                    }
+                }
+                break;
+           
+            case "MATAR PIEZA":
+                panelH.agregarMovimiento("Se destruyó la pieza " + p2 + " del jugador " + jugadorRival.getUsuario().getUsuario());
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    public void hayZombies(){
+        hayZombie = false;
+        for (int i = 0; i < jugadorTurno.getPiezas().size(); i++) {
+            if (jugadorTurno.getPieza(i) instanceof Zombie) {
+                Pieza pieza = jugadorTurno.getPieza(i);
+                if (pieza instanceof Zombie && pieza.getHabilitada()) {
+                    hayZombie = true;
+                    return;
+                }
+            }
+        }
+    }
+    
+
     
 }

@@ -12,7 +12,7 @@ public class Vampiro extends Pieza{
 
     public void ataqueEspecial(){
         Ataque = 1;
-        partida.hacerAtaque(partida.filaTemp, partida.columnaTemp, partida.numPieza);
+        partida.hacerAtaque(partida.xEnemiga, partida.yEnemiga, partida.numPieza);
         Vida ++;
         Ataque = 3;
     }
@@ -20,4 +20,9 @@ public class Vampiro extends Pieza{
     public void setPartida(Partida partida){
         this.partida = partida;
     }
+    
+    @Override
+    public String toString(){
+         return "Vampiro";
+     }
 }

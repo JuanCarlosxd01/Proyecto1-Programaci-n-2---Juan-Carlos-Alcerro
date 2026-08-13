@@ -12,6 +12,11 @@ public class Zombie extends Pieza{
 
 
     public void ataqueEspecial(){
-        
+        return;
     }
+    
+    @Override
+    public String toString(){
+         return "Zombie";
+     }
 }

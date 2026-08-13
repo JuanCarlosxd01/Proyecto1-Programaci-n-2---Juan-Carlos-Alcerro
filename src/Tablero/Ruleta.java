@@ -127,7 +127,7 @@ public class Ruleta extends JPanel{
         this.listenerDetenido = listener;
     }
     
-    public void habilitarRulera(){
+    public void habilitarRuleta(){
         puedeGirar = true;
     } 
 

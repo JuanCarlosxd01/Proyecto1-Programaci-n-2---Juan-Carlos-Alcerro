@@ -109,8 +109,17 @@ public class Necromante extends Pieza{
         return zombie;
     }
     
+    public String getHabilidad(){
+        return habilidad;
+    }
+    
     public void setNum(int num){
         this.num = num;
     }
+    
+    @Override
+    public String toString(){
+         return "El Necromante";
+     }
 
 }

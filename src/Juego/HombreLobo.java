@@ -52,4 +52,9 @@ public class HombreLobo extends Pieza{
      public void setCasillas(JButton[][] casillas){
         this.casillas = casillas;
     } 
+     
+     @Override
+     public String toString(){
+         return "Hombre Lobo";
+     }
 }
