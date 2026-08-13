@@ -13,6 +13,8 @@ public abstract class Pieza {
     boolean habilitada = false;
     private int posX;
     private int posY;
+    protected int vidaMax;
+    protected int escudoMax;
     
     public Pieza(int Ataque, int Vida, int Escudo, boolean habilitada, int posX, int posY){
         this.Ataque = Ataque;
@@ -21,6 +23,8 @@ public abstract class Pieza {
         this.habilitada = habilitada;
         this.posX = posX;
         this.posY = posY;
+        this.vidaMax = Vida;
+        this.escudoMax = Escudo;
         
     }
     
@@ -75,5 +79,14 @@ public abstract class Pieza {
     public void setAtaque(int Ataque){
         this.Ataque = Ataque;
     }
+
+    public int getVidaMax() {
+        return vidaMax;
+    }
+
+    public int getEscudoMax() {
+        return escudoMax;
+    }
+    
     
 }

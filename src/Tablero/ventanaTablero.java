@@ -42,7 +42,7 @@ public final class VentanaTablero extends JPanel{
         
         PanelHistorial panelH = new PanelHistorial(panelPrincipal);  
         
-        Partida partida = new Partida(tablero, usuarioActivo, usuarioOponente, btnAtacar, btnHabilidad, btnMover, panelH);
+        Partida partida = new Partida(tablero, usuarioActivo, usuarioOponente, btnAtacar, btnHabilidad, btnMover, panelH, panelI);
         
         pBotones.setLayout(new GridLayout(3, 1, 5, 5));
         panelRuleta.add(partida.getRuleta());

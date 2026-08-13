@@ -43,8 +43,10 @@ public class Partida {
     PanelHistorial panelH;
     int xEnemiga;
     int yEnemiga;
+    PanelInformacion panelI;
 
-    public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover, PanelHistorial panelH){
+    public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover, PanelHistorial panelH, PanelInformacion panelI){
+        this.panelI = panelI;
         ruleta = new Ruleta(Color.GRAY);
         this.panelH = panelH;
         this.tablero = tablero;
@@ -64,6 +66,8 @@ public class Partida {
         clickBotones();
         
         tablero.inhabilitarCasillas(5, 5);
+        panelI.actualizarJugador(jugadorTurno.getUsuario().getUsuario());
+        panelI.actualizarRival(jugadorRival.getUsuario().getUsuario());
         iniciarTurno();
     }
     
@@ -73,7 +77,7 @@ public class Partida {
         botones[2].setEnabled(false);
         ruleta.habilitarRuleta();
         panelH.agregarMovimiento("Es turno del jugador: " + jugadorTurno.getUsuario().getUsuario() + ".");
-        
+        panelI.actualizarTurno(jugadorTurno.getUsuario().getUsuario());
         jugadorTurno.setTurno(true);
         if(jugadorTurno == jugador1){
             ruleta.setColor(Color.GRAY);
@@ -277,6 +281,8 @@ public class Partida {
                             botones[0].setEnabled(true);
                             botones[1].setEnabled(true);
                             botones[2].setEnabled(true);
+                            Pieza piezaSeleccionada = jugadorTurno.getPieza(numPieza);
+                            actualizarPanelInfo(piezaSeleccionada);
                             if(!hayOpciones){
                                 botones[0].setEnabled(false);
                             }
@@ -626,6 +632,14 @@ public class Partida {
                 }
             }
         }
+    }
+    
+    public void actualizarPanelInfo(Pieza piezaSeleccionada){
+        panelI.actualizarPieza(piezaSeleccionada.toString());
+        panelI.actualizarPosicion(piezaSeleccionada.getPosX(), piezaSeleccionada.getPosY());
+        panelI.actualizarVida(piezaSeleccionada.getVida(), piezaSeleccionada.getVidaMax());
+        panelI.actualizarEscudo(piezaSeleccionada.getEscudo(), piezaSeleccionada.getEscudoMax());
+        panelI.actualizarAtaque(piezaSeleccionada.getAtaque());
     }
     
 
