@@ -5,6 +5,7 @@ import Tablero.*;
 import javax.swing.*;
 import java.awt.*;
 import Menus.*;
+import java.util.Calendar;
 
 public class Partida {
     
@@ -51,8 +52,10 @@ public class Partida {
     int contGitos2;
     JPanel panelPrincipal;
     VentanaTablero ventana;
+    Calendar fechaPartida;
 
     public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover, PanelHistorial panelH, PanelInformacion panelI, JPanel panelPrincipal, VentanaTablero ventana){
+        fechaPartida = Calendar.getInstance();
         this.panelI = panelI;
         this.ventana = ventana;
         this.panelPrincipal = panelPrincipal;
@@ -448,6 +451,7 @@ public class Partida {
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
                         jugadaMensaje("MATAR PIEZA");
+                        partidaSigue(jugadorRival.getPiezas().size() - 1);
                         if(!(jugadorRival.getPieza(i) instanceof Zombie)){
                             if(jugadorRival == jugador1){
                                 ruleta.setdeshabilitar1(i);
@@ -507,12 +511,12 @@ public class Partida {
         btnInvocar.setMaximumSize(tamano);
         btnAtaqueZombie.setPreferredSize(tamano);
         btnAtaqueZombie.setMaximumSize(tamano);
-        VentanaTablero.getPanelRuleta().add(btnAtaqueDistancia, 6);
-        VentanaTablero.getPanelRuleta().add(btnInvocar, 7);
-        VentanaTablero.getPanelRuleta().add(btnAtaqueZombie, 8);
-        VentanaTablero.getPanelRuleta().add(Box.createVerticalStrut(10), 9);
-        VentanaTablero.getPanelRuleta().revalidate();
-        VentanaTablero.getPanelRuleta().repaint();
+        ventana.getPanelRuleta().add(btnAtaqueDistancia, 6);
+        ventana.getPanelRuleta().add(btnInvocar, 7);
+        ventana.getPanelRuleta().add(btnAtaqueZombie, 8);
+        ventana.getPanelRuleta().add(Box.createVerticalStrut(10), 9);
+        ventana.getPanelRuleta().revalidate();
+        ventana.getPanelRuleta().repaint();
     }
     
     public void accionarHabilidadesNecromante(){
@@ -599,11 +603,11 @@ public class Partida {
     }
     
     public void quitarBotones(){
-        VentanaTablero.getPanelRuleta().remove(btnAtaqueDistancia);
-        VentanaTablero.getPanelRuleta().remove(btnInvocar);
-        VentanaTablero.getPanelRuleta().remove(btnAtaqueZombie);
-        VentanaTablero.getPanelRuleta().revalidate();
-        VentanaTablero.getPanelRuleta().repaint();
+        ventana.getPanelRuleta().remove(btnAtaqueDistancia);
+        ventana.getPanelRuleta().remove(btnInvocar);
+        ventana.getPanelRuleta().remove(btnAtaqueZombie);
+        ventana.getPanelRuleta().revalidate();
+        ventana.getPanelRuleta().repaint();
         tablero.inhabilitarCasillas(5, 5);
         terminarTurno();
     }
@@ -705,12 +709,29 @@ public class Partida {
     public void rendirse(){
         JButton boton = panelI.getBtnRendirse();
         boton.addActionListener(e ->{
+            jugadorRival.getUsuario().setPuntos(3);
+            jugadorTurno.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), "Rendirse" , fechaPartida);
+            jugadorRival.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), "Rendirse" , fechaPartida);
             ventana.mostrarPanelFinal(jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "rendirse");
         });
     }
+    
+    public int partidaSigue(int i){
+        int inhabilitadas = 0;
+        if(i >= 0){
+            if(!jugadorRival.getPieza(i).getHabilitada()){
+                inhabilitadas++;
+                if(inhabilitadas == jugadorRival.getPiezas().size()){
+                    jugadorTurno.getUsuario().setPuntos(3);
+                    jugadorTurno.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "ganar" , fechaPartida);
+                    jugadorRival.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "ganar" , fechaPartida);
+                    ventana.mostrarPanelFinal(jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "Acabar con todas las piezas");
+                }
+                return partidaSigue(i - 1);
+            }           
+        }
+        return -1;
         
-    
-    
-
+    }
     
 }

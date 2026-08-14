@@ -2,6 +2,9 @@
 package Menus;
 
 import java.util.Calendar;
+import java.util.ArrayList;
+import Juego.*;
+
 public class Usuario {
     
     private String usuario;
@@ -9,6 +12,7 @@ public class Usuario {
     private int puntos;
     private Calendar fechaIngreso;;
     private boolean activo;
+    private ArrayList<RegistroPartida> partidas = new ArrayList<>();
     
     public Usuario(String usuario, String contrasena){
         this.usuario = usuario;
@@ -47,7 +51,7 @@ public class Usuario {
     } 
     
     public void setPuntos(int puntos){
-        this.puntos = puntos;
+        this.puntos += puntos;
     }
     
     public void setFechaIngreso(Calendar fechaIngreso){
@@ -67,4 +71,13 @@ public class Usuario {
     public String toString(){
         return usuario;
     } 
+    
+    public void agregarRegistroPartida(String jugador, String oponente, String ganador, String forma, Calendar tiempo){
+        partidas.addFirst(new RegistroPartida(jugador, oponente, ganador, forma, tiempo));
+    }
+    
+    public ArrayList<RegistroPartida> getPartidas(){
+        return partidas;
+    }
+    
 }

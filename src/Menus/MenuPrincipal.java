@@ -39,7 +39,7 @@ public class MenuPrincipal extends Menu{
         
         
         btnReportes.addActionListener(e -> {
-            MenuReportes menuR = new MenuReportes("REPORTES", contenedor, transicion);
+            MenuReportes menuR = new MenuReportes("REPORTES", contenedor, transicion, usuarios, usuarioActivo);
             contenedor.add(menuR, "Reportes");
             cambiarPanel("Reportes");
         });

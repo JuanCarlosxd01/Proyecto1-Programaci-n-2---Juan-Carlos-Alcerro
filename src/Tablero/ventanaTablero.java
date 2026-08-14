@@ -13,10 +13,10 @@ public final class VentanaTablero extends JPanel{
     JPanel contenedor;
     JPanel panelPrincipal;
     BorderLayout border;
-    static JButton btnHabilidad;
-    static JButton btnAtacar;
-    static JButton btnMover;
-    static JPanel panelRuleta = new JPanel(){
+    JButton btnHabilidad;
+    JButton btnAtacar;
+    JButton btnMover;
+    JPanel panelRuleta = new JPanel(){
         private Image fondo = new ImageIcon(getClass().getResource("/Imagenes/PanelRuleta.jpeg")).getImage();
         
         @Override
@@ -25,7 +25,6 @@ public final class VentanaTablero extends JPanel{
             g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
         }
     };
-    private JLayeredPane capas;
     private PanelFinalPartida panelFinal;
     private VentanaPrincipal ventana;
     
@@ -34,11 +33,10 @@ public final class VentanaTablero extends JPanel{
         this.contenedor = contenedor;
         this.transicion = transicion;
         ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLayout(new BorderLayout());
         border = new BorderLayout();
         panelPrincipal = new JPanel();
         panelPrincipal.setLayout(border);
-        capas = new JLayeredPane();
-        capas.setLayout(null);
         
         panelRuleta.setLayout(new BoxLayout(panelRuleta, BoxLayout.Y_AXIS));
         JPanel pBotones = new JPanel();
@@ -65,8 +63,7 @@ public final class VentanaTablero extends JPanel{
         panelRuleta.add(btnMover); 
         panelRuleta.add(Box.createVerticalStrut(60));
         panelPrincipal.add(panelRuleta, BorderLayout.WEST);
-        ventana.getContentPane().removeAll();
-        ventana.add(panelPrincipal);
+        add(panelPrincipal);
         ventana.revalidate();
         ventana.repaint();
     }
@@ -80,18 +77,18 @@ public final class VentanaTablero extends JPanel{
         boton.setAlignmentX(Component.CENTER_ALIGNMENT);     
         return boton;
     }
-    public static JPanel getPanelRuleta(){
+    public JPanel getPanelRuleta(){
         return panelRuleta;
     }
     
     public void mostrarPanelFinal(String ganador, String perdedor, String forma){
         panelFinal = new PanelFinalPartida(ganador, perdedor, forma);
         panelFinal.setBounds(0, 0, 1536, 864);
-        panelPrincipal.add(panelFinal);
+        contenedor.add(panelFinal, "panelFinal");
+        transicion.show(contenedor, "panelFinal");
+        ventana.setSize(800,800);
+        ventana.setLocationRelativeTo(null);
         panelFinal.setVisible(true);
-        panelPrincipal.setComponentZOrder(panelFinal, 0);
-        panelPrincipal.revalidate();
-        panelPrincipal.repaint();
         Timer timer = new Timer(3000, e ->{
             transicion.show(contenedor, "MenuPrincipal");
         });

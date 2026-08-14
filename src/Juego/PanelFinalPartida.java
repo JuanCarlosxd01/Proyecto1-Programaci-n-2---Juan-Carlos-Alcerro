@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class PanelFinalPartida extends JPanel{
     
+    private JLabel lblPerdedor;
     private JLabel lblGanador;
     
     public PanelFinalPartida(String ganador, String perdedor, String forma){
@@ -16,17 +17,22 @@ public class PanelFinalPartida extends JPanel{
         
         panelMensaje.setLayout(new BoxLayout(panelMensaje, BoxLayout.Y_AXIS));
         if(forma.equals("rendirse")){
-            lblGanador = new JLabel(perdedor + " se ha retirado. ¡Felicidades, " + ganador +", has ganado 3 puntos!");
+            lblPerdedor = new JLabel(perdedor + " se ha retirado.");
+            lblGanador = new JLabel("¡Felicidades, " + ganador +", has ganado 3 puntos!");
         }
-        else{
-            lblGanador = new JLabel("¡" + ganador + "ha ganado!");
+        else if(forma.equals("ganar")){
+            lblPerdedor = new JLabel(ganador + " venció a " + perdedor + ".");
+            lblGanador = new JLabel("¡Felicidades has ganado 3 puntos!");
         }
-        
-        
+        lblPerdedor.setForeground(Color.WHITE);
+        lblPerdedor.setFont(new Font("Arial", Font.BOLD, 30));
+        lblPerdedor.setAlignmentX(Component.CENTER_ALIGNMENT); 
         lblGanador.setForeground(Color.WHITE);
         lblGanador.setFont(new Font("Arial", Font.BOLD, 30));
-        lblGanador.setAlignmentX(Component.CENTER_ALIGNMENT);      
+        lblGanador.setAlignmentX(Component.CENTER_ALIGNMENT); 
         
+        panelMensaje.add(lblPerdedor);
+        panelMensaje.add(Box.createVerticalStrut(30));
         panelMensaje.add(lblGanador);
         panelMensaje.add(Box.createVerticalStrut(30));
         
