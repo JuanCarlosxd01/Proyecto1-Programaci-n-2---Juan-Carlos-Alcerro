@@ -6,10 +6,10 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class ventanaSeleccionarOponente extends Menu{
+public class PanelSeleccionarOponente extends Menu{
     
     
-    public ventanaSeleccionarOponente(String titulo, JPanel contenedor, CardLayout transicion, ArrayList<Usuario> usuarios, Usuario usuarioActivo){
+    public PanelSeleccionarOponente(String titulo, JPanel contenedor, CardLayout transicion, ArrayList<Usuario> usuarios, Usuario usuarioActivo){
         super(titulo, contenedor, transicion);
         DefaultComboBoxModel<Usuario> modelo = new DefaultComboBoxModel<>();
         
@@ -38,7 +38,7 @@ public class ventanaSeleccionarOponente extends Menu{
         btnContinuar.addActionListener(e ->{ // Cambiar para que dentro del jugador se almacene al usuario 
             Usuario usuarioOponente = (Usuario) lista.getSelectedItem();
             if(usuarioOponente != null){
-                VentanaTablero ventanaT = new VentanaTablero(ventana, usuarioActivo, usuarioOponente);
+                VentanaTablero ventanaT = new VentanaTablero(ventana, usuarioActivo, usuarioOponente, contenedor, transicion);
                 contenedor.add(ventanaT, "Tablero");
                 cambiarPanel("Tablero"); 
             }

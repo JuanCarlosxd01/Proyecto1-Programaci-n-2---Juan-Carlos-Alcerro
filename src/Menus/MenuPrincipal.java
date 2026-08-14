@@ -16,8 +16,8 @@ public class MenuPrincipal extends Menu{
         txtUsuario.setForeground(Color.blue);
         txtUsuario.setFont(new Font("Arial", Font.BOLD, 14));
         txtUsuario.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(Box.createVerticalStrut(30));
         panel.add(txtUsuario);  
-        panel.add(Box.createVerticalStrut(20));
         
         JButton btnJugar = Botones(columna, panel, "JUGAR VAMPIRE WARGAME", 40);
         JButton btnMiCuenta = Botones(columna, panel, "MI CUENTA", 40);

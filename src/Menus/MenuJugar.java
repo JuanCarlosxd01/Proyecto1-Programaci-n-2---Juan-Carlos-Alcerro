@@ -15,7 +15,7 @@ public class MenuJugar extends Menu{
         add(panel);
         
         btnSeleccionarOponente.addActionListener(e -> {
-            ventanaSeleccionarOponente oponente = new ventanaSeleccionarOponente("Seleccionar Oponente: ", contenedor, transicion, usuarios, usuarioActivo);           
+            PanelSeleccionarOponente oponente = new PanelSeleccionarOponente("Seleccionar Oponente: ", contenedor, transicion, usuarios, usuarioActivo);           
             contenedor.add(oponente, "Seleccionar Oponente");
             cambiarPanel("Seleccionar Oponente");
         });

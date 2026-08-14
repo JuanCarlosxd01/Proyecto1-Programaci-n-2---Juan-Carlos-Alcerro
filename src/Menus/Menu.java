@@ -3,7 +3,6 @@ package Menus;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public abstract class Menu extends JPanel{
     
@@ -16,6 +15,7 @@ public abstract class Menu extends JPanel{
     
     //Constructor  que crea el panel y le pone titulo
     public Menu(String titulo, JPanel contenedor, CardLayout transicion){
+        setOpaque(false);
         this.contenedor = contenedor;
         this.transicion = transicion;
         panel = new JPanel(); 
@@ -24,19 +24,18 @@ public abstract class Menu extends JPanel{
         panel.setLayout(columna);
         
         panel.setLayout(columna);
-        
+        panel.setOpaque(false);
         JLabel Titulo = new JLabel(titulo);
-        Titulo.setForeground(Color.BLACK);
+        Titulo.setForeground(Color.WHITE);
         Titulo.setFont(new Font("Arial", Font.BOLD, 20));
         Titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(Box.createVerticalStrut(80));
+        panel.add(Box.createVerticalStrut(150));
         panel.add(Titulo);  
-        panel.add(Box.createVerticalStrut(80));
       
     }
     //Funcion para crear botones
     public static JButton Botones(BoxLayout columna, JPanel panel, String texto, int esp){
-        Dimension d = new Dimension(300, 80);
+        Dimension d = new Dimension(300, 60);
         JButton boton = new JButton(texto);
         boton.setPreferredSize(d);
         boton.setMaximumSize(d);
@@ -59,6 +58,7 @@ public abstract class Menu extends JPanel{
     
     public JPanel crearPanel(String codigo){
         JPanel principal = new JPanel();
+        principal.setOpaque(false);
         BoxLayout columna = BoxLayouts(principal);
         principal.setLayout(columna);
         contenedor.add(principal, codigo);

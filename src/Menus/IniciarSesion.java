@@ -12,12 +12,13 @@ public class IniciarSesion extends JPanel{
     protected Usuario usuarioActivo;
     
     public IniciarSesion(MenuDeInicio ventana, JPanel principal, ArrayList<Usuario> usuarios, String txtTitulo, String txtIngCampo1, String txtIngCampo2, String txtBoton1, String txtBoton2){  
+        setOpaque(false);
         setSize(800,800);
         this.ventana = ventana; 
         
         JLabel Titulo = new JLabel(txtTitulo);
-        Titulo.setForeground(Color.BLACK);
-        Titulo.setFont(new Font("Arial", Font.BOLD, 15));
+        Titulo.setForeground(Color.WHITE);
+        Titulo.setFont(new Font("Arial", Font.BOLD, 20));
         Titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         JTextField campoUsuario = new JTextField(15);
@@ -26,6 +27,7 @@ public class IniciarSesion extends JPanel{
         JPanel ingContrasena = campoTexto(txtIngCampo2, campoContrasena); 
         
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        fila.setOpaque(false);
         JButton btnIngresar = Botones(txtBoton1);
         JButton btnRegresar = Botones(txtBoton2);
         fila.add(btnIngresar);
@@ -49,15 +51,15 @@ public class IniciarSesion extends JPanel{
             ventana.cambiarPanel("MenuDeInicio");
         });
         
-        principal.add(Box.createVerticalStrut(80));
+        principal.add(Box.createVerticalStrut(150));
         principal.add(Titulo);
-        principal.add(Box.createVerticalStrut(80));
+        principal.add(Box.createVerticalStrut(40));
         principal.add(ingUsuario);
-        principal.add(Box.createVerticalStrut(60));
+        principal.add(Box.createVerticalStrut(20));
         principal.add(ingContrasena);
-        principal.add(Box.createVerticalStrut(60));
+        principal.add(Box.createVerticalStrut(10));
         principal.add(mensaje);
-        principal.add(Box.createVerticalStrut(60));
+        principal.add(Box.createVerticalStrut(40));
         principal.add(fila);    
         setVisible(true); 
         
@@ -66,15 +68,18 @@ public class IniciarSesion extends JPanel{
     
     public JPanel campoTexto(String texto, JTextField campoTxt){
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        fila.add(new JLabel(texto));
+        fila.setOpaque(false);
+        JLabel txtLabel = new JLabel(texto);
+        txtLabel.setForeground(Color.WHITE);
+        fila.add(txtLabel);
+        fila.add(Box.createHorizontalStrut(20));
         fila.add(campoTxt);
-        fila.add(Box.createHorizontalStrut(50));
       
         return fila;
     }
     
     public static JButton Botones(String texto){
-        Dimension d = new Dimension(300, 80);
+        Dimension d = new Dimension(300, 60);
         JButton boton = new JButton(texto);
         boton.setPreferredSize(d);
         boton.setMaximumSize(d);

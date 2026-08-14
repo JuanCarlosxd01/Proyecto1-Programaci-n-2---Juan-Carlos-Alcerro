@@ -25,6 +25,7 @@ public class Partida {
     boolean invocar = false;
     Necromante nSeleccionado = null;
     boolean lanzaN = false;
+    public PanelFinalPartida panelF;
     
     int xVieja;
     int yVieja;
@@ -44,10 +45,18 @@ public class Partida {
     int xEnemiga;
     int yEnemiga;
     PanelInformacion panelI;
+    int girosJugador1;
+    int girosJugador2;
+    int contGiros1;
+    int contGitos2;
+    JPanel panelPrincipal;
+    VentanaTablero ventana;
 
-    public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover, PanelHistorial panelH, PanelInformacion panelI){
+    public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover, PanelHistorial panelH, PanelInformacion panelI, JPanel panelPrincipal, VentanaTablero ventana){
         this.panelI = panelI;
-        ruleta = new Ruleta(Color.GRAY);
+        this.ventana = ventana;
+        this.panelPrincipal = panelPrincipal;
+        ruleta = new Ruleta(false);
         this.panelH = panelH;
         this.tablero = tablero;
         casillas = tablero.getCasillas();
@@ -64,34 +73,37 @@ public class Partida {
         jugadorRival = jugador2;
         clickCasilla();
         clickBotones();
+        rendirse();
         
         tablero.inhabilitarCasillas(5, 5);
         panelI.actualizarJugador(jugadorTurno.getUsuario().getUsuario());
         panelI.actualizarRival(jugadorRival.getUsuario().getUsuario());
-        iniciarTurno();
+        iniciarTurno(1);
     }
     
-    public void iniciarTurno(){
+    public void iniciarTurno(int giros){
+        panelI.actualizarIntentos(giros);
         botones[0].setEnabled(false);
         botones[1].setEnabled(false);
-        botones[2].setEnabled(false);
+        botones[2].setEnabled(false);    
         ruleta.habilitarRuleta();
         panelH.agregarMovimiento("Es turno del jugador: " + jugadorTurno.getUsuario().getUsuario() + ".");
         panelI.actualizarTurno(jugadorTurno.getUsuario().getUsuario());
         jugadorTurno.setTurno(true);
         if(jugadorTurno == jugador1){
-            ruleta.setColor(Color.GRAY);
-            
+            ruleta.setImagenMostrar(true);
             ruleta.setListenerDetenido(e ->{
-                habilitarPiezas(); 
+                panelI.actualizarIntentos(giros - 1);
+                habilitarPiezas(giros); 
             });
         }
         
         else{
-            ruleta.setColor(Color.BLACK);
+            ruleta.setImagenMostrar(false);
             
             ruleta.setListenerDetenido(e ->{
-                habilitarPiezas();
+                panelI.actualizarIntentos(giros - 1);
+                habilitarPiezas(giros);
             });
         }
     }   
@@ -123,10 +135,13 @@ public class Partida {
             jugadorTurno = jugador1;
             jugadorRival = jugador2;
         }
-        iniciarTurno();
+        int giros = 0;
+        giros = calcularGiros(jugadorTurno);
+        
+        iniciarTurno(giros);
     }  
     
-    public void habilitarPiezas(){
+    public void habilitarPiezas(int giros){
         boolean hayPieza = false;
         int xTemp1;
         int yTemp1;
@@ -193,6 +208,15 @@ public class Partida {
             }  
             piezasSeleccionadas = hayPieza;
         }    
+        else if(resultado.equals("ninguna")){
+            giros --;
+            if(giros > 0){
+                iniciarTurno(giros);
+            }
+            else{
+                terminarTurno();
+            }
+        }
         hayPieza = false;
     }
     
@@ -424,6 +448,14 @@ public class Partida {
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
                         jugadaMensaje("MATAR PIEZA");
+                        if(!(jugadorRival.getPieza(i) instanceof Zombie)){
+                            if(jugadorRival == jugador1){
+                                ruleta.setdeshabilitar1(i);
+                            }
+                            else{
+                                ruleta.setdeshabilitar2(i);
+                            }
+                        }
                     }
                     break;
                 }
@@ -435,7 +467,14 @@ public class Partida {
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
                         jugadaMensaje("MATAR PIEZA");
-                        
+                        if(!(jugadorRival.getPieza(i) instanceof Zombie)){
+                            if(jugadorRival == jugador1){
+                                ruleta.setdeshabilitar1(i);
+                            }
+                            else{
+                                ruleta.setdeshabilitar2(i);
+                            }
+                        }
                     }
                      jugadorTurno.getPieza(numPieza).setAtaque(ataque * 2);
                      break;
@@ -641,6 +680,36 @@ public class Partida {
         panelI.actualizarEscudo(piezaSeleccionada.getEscudo(), piezaSeleccionada.getEscudoMax());
         panelI.actualizarAtaque(piezaSeleccionada.getAtaque());
     }
+    
+    public int calcularGiros(Jugador jugadorTurno){
+        int deshabilitadas = 0;
+        for (int i = 0; i < jugadorTurno.getPiezas().size(); i++) {
+            if(!(jugadorTurno.getPieza(i) instanceof Zombie)){
+                if(!jugadorTurno.getPieza(i).getHabilitada()){
+                    deshabilitadas++;
+                }
+            }
+        }
+        if(deshabilitadas <2){
+            return 1;
+        }
+        else if(deshabilitadas >=2 && deshabilitadas <4){
+            return 2;
+        }
+        else if(deshabilitadas >=4){
+            return 3;
+        }
+        return 1;
+    }
+    
+    public void rendirse(){
+        JButton boton = panelI.getBtnRendirse();
+        boton.addActionListener(e ->{
+            ventana.mostrarPanelFinal(jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "rendirse");
+        });
+    }
+        
+    
     
 
     
