@@ -29,18 +29,17 @@ public final class VentanaTablero extends JPanel{
     private PanelFinalPartida panelFinal;
     private VentanaPrincipal ventana;
     ImageIcon imgBoton = new ImageIcon(getClass().getResource("/Imagenes/boton2.png"));
-    Musica musicaTablero;
+    Musica musicaTablero = musicaTablero = new Musica("MusiquitaJuego");
     
     public VentanaTablero(VentanaPrincipal ventana, Usuario usuarioActivo, Usuario usuarioOponente, JPanel contenedor, CardLayout transicion){
         this.ventana = ventana;
         this.contenedor = contenedor;
         this.transicion = transicion;
-        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        ventana.setResizable(true);
         setLayout(new BorderLayout());
         border = new BorderLayout();
         panelPrincipal = new JPanel();
         panelPrincipal.setLayout(border);
-        musicaTablero = new Musica("MusiquitaJuego");
         musicaTablero.setVolumen(-15.0f);
         musicaTablero.repetir();
         
@@ -97,9 +96,11 @@ public final class VentanaTablero extends JPanel{
         contenedor.add(panelFinal, "panelFinal");
         transicion.show(contenedor, "panelFinal");
         ventana.setSize(800,800);
+        ventana.setResizable(false);
         ventana.setLocationRelativeTo(null);
         panelFinal.setVisible(true);
         Timer timer = new Timer(3000, e ->{
+            ventana.getMusicaFondo().repetir();
             transicion.show(contenedor, "MenuPrincipal");
         });
         timer.setRepeats(false);

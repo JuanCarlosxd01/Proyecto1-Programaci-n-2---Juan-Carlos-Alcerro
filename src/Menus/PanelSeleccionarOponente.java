@@ -40,9 +40,7 @@ public class PanelSeleccionarOponente extends Menu{
             Usuario usuarioOponente = (Usuario) lista.getSelectedItem();
             if(usuarioOponente != null){
                 ventana.getMusicaFondo().detener();
-                VentanaTablero ventanaT = new VentanaTablero(ventana, usuarioActivo, usuarioOponente, contenedor, transicion);
-                contenedor.add(ventanaT, "Tablero");
-                cambiarPanel("Tablero"); 
+                ventana.cargarPartida(usuarioActivo, usuarioOponente, contenedor, transicion);
             }
             else{
                 mensaje.setText("NO HAY MAS USUARIOS REGISTRADOS");

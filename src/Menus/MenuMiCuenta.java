@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class MenuMiCuenta extends Menu{
     
+    ImageIcon imagen = new ImageIcon(getClass().getResource("/Imagenes/ImagenPanel.png"));
+
     
     public MenuMiCuenta(String titulo, JPanel contenedor, CardLayout transicion, ArrayList<Usuario> usuarios, Usuario usuarioActivo){
         super(titulo, contenedor, transicion);
@@ -14,6 +16,9 @@ public class MenuMiCuenta extends Menu{
         JButton btnCambiarContrasena = Botones(columna, panel, "CAMBIAR CONTRASENA", 40);
         JButton btnCerrarCuenta = Botones(columna, panel, "CERRAR CUENTA", 40);
         JButton btnRegresar = Botones(columna, panel, "REGRESAR", 40);
+        UIManager.put("OptionPane.background", Color.BLACK);
+        UIManager.put("Panel.background", Color.BLACK);
+        UIManager.put("OptionPane.messageForeground", Color.WHITE);
         
         btnInformacionPersonal.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, usuarioActivo.mostrarInformacion());
@@ -74,6 +79,7 @@ public class MenuMiCuenta extends Menu{
         }
         if(usuarios.get(indice).getUsuario().equals(usuarioActivo.getUsuario())){
             usuarios.get(indice).setActivo(false);
+            usuarios.remove(indice);
             usuarioActivo = null;
             return indice;
         }

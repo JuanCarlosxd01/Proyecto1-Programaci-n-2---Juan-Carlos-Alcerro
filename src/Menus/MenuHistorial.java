@@ -49,9 +49,17 @@ public class MenuHistorial extends Menu{
     
     private void agregarPartidas(JTextArea areaPartidas){
         int cont = 0;
+        
+        if(areaPartidas.getText().equals("No hay partidas registradas.")){
+            areaPartidas.setText("");
+        }
+        
         for (int i = 0; i < usuarioActivo.getPartidas().size() ; i++) {
             cont++;
             areaPartidas.append(cont + ". Partida #" +cont+ " : \n" + usuarioActivo.getPartidas().get(i) +"\n\n");
+        }
+        if(areaPartidas.getText().trim().isEmpty()){
+            areaPartidas.setText("No hay partidas registradas.");
         }
     }
     

@@ -4,6 +4,7 @@ package Menus;
 import musica.*;
 import java.awt.*;
 import javax.swing.*;
+import Tablero.*;
 
 public final class VentanaPrincipal extends JFrame{
     
@@ -43,6 +44,43 @@ public final class VentanaPrincipal extends JFrame{
 
         setVisible(true); 
         
+    }
+    
+    public void cargarPartida(
+        Usuario usuarioActivo,
+        Usuario usuarioOponente,
+        JPanel contenedor,
+        CardLayout transicion) {
+        PanelCarga panelCarga = new PanelCarga();
+        contenedor.add(panelCarga, "Carga");
+        transicion.show(contenedor, "Carga");
+        contenedor.revalidate();
+        contenedor.repaint();
+        SwingWorker<VentanaTablero, Void> worker = new SwingWorker<>() {
+            @Override
+            protected VentanaTablero doInBackground() {
+
+                return new VentanaTablero(VentanaPrincipal.this, usuarioActivo, usuarioOponente, contenedor, transicion );}
+            @Override
+            protected void done() {
+                try {
+                    VentanaTablero tablero = get();
+                    contenedor.add(tablero, "Tablero");
+                    transicion.show(contenedor, "Tablero");
+                    contenedor.revalidate();
+                    contenedor.repaint();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        transicion.show(contenedor, "Carga");
+        contenedor.revalidate();
+        contenedor.repaint();
+        SwingUtilities.invokeLater(() -> {  
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            worker.execute();
+        });
     }
     
     public void mostrarMenuPrincipal(){

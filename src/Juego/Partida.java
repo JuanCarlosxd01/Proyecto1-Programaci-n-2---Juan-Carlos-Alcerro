@@ -284,11 +284,8 @@ public class Partida {
         jugadorTurno.getPieza(numPieza).setPosY(nuevaColumna);
         tablero.inhabilitarCasillas(5, 5);     
         
-        
         jugadaMensaje("MOVER");
         moverPieza = false;
-        
-        terminarTurno();
     }
     
     private void clickCasilla() {
@@ -324,6 +321,7 @@ public class Partida {
                     }
                     else if(numPieza != -1 && moverPieza){
                         moverPieza(xVieja, yVieja, filaTemp, columnaTemp, numPieza); 
+                        terminarTurno();
                     }
                     else if(numPieza != -1 && atacarEnemigo){
                         xEnemiga = filaTemp;
@@ -348,13 +346,17 @@ public class Partida {
                         else{
                             nSeleccionado.setNum(2);
                         }
+                        musicaMover.reproducir();
                         nSeleccionado.ataqueEspecial();
                         jugadaMensaje("HABILIDAD ESPECIAL");
                         jugadorTurno.getPiezas().add(nSeleccionado.getZombie());
                         quitarBotones();
                     }
                     else if(numPieza != -1 && ataqueZombie){
-                        numPieza = piezaCasilla(xEnemiga, yEnemiga);
+                        tablero.inhabilitarCasillas(5, 5);
+                        casillas[filaTemp][columnaTemp].setBackground(Color.ORANGE);
+                        aparecerBotones(filaTemp, columnaTemp);
+                        numPieza = piezaCasilla(filaTemp, columnaTemp);
                         casillasDisponibles(filaTemp, columnaTemp, "ATACAR"); 
                     }
                 });
@@ -427,11 +429,14 @@ public class Partida {
     public void hacerAtaque(int xEnemigo, int yEnemigo, int numPieza){
         musicaAtacar.reproducir();
         int ataque = jugadorTurno.getPieza(numPieza).getAtaque();
+        if(lanzaN){
+            ataque = ataque / 2;
+        }
         for (int i = 0; i < jugadorRival.getPiezas().size(); i++) {
             int x = jugadorRival.getPieza(i).getPosX();
             int y = jugadorRival.getPieza(i).getPosY();
             if(xEnemigo == x && yEnemigo == y){
-                if(!lanzaN){
+                if(!lanzaN){ 
                     if(jugadorRival.getPieza(i).getEscudo() <= 0){
                         jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - ataque);
                     }
@@ -454,6 +459,7 @@ public class Partida {
                     if(jugadorRival.getPieza(i).getVida() <= 0){
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
+                        noNecromantes(jugadorRival);
                         jugadaMensaje("MATAR PIEZA");
                         partidaSigue(jugadorRival.getPiezas().size() - 1, 0);
                         if(!(jugadorRival.getPieza(i) instanceof Zombie)){
@@ -474,6 +480,7 @@ public class Partida {
                         jugadorRival.getPieza(i).setVida(0);
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
+                        noNecromantes(jugadorRival);
                         jugadaMensaje("MATAR PIEZA");
                         partidaSigue(jugadorRival.getPiezas().size() - 1, 0);
                         if(!(jugadorRival.getPieza(i) instanceof Zombie)){
@@ -485,7 +492,6 @@ public class Partida {
                             }
                         }
                     }
-                     jugadorTurno.getPieza(numPieza).setAtaque(ataque * 2);
                      break;
                 }
                 
@@ -714,11 +720,19 @@ public class Partida {
     public void rendirse(){
         JButton boton = panelI.getBtnRendirse();
         boton.addActionListener(e ->{
-            ventana.getMusicaTablero().detener();
-            jugadorRival.getUsuario().setPuntos(3);
-            jugadorTurno.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), "Rendirse" , fechaPartida);
-            jugadorRival.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), "Rendirse" , fechaPartida);
-            ventana.mostrarPanelFinal(jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "rendirse");
+            UIManager.put("OptionPane.background", Color.BLACK);
+            UIManager.put("Panel.background", Color.BLACK);
+            UIManager.put("OptionPane.messageForeground", Color.WHITE);
+            int opcion = JOptionPane.showConfirmDialog(null, "¿Quieres rendirte?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if(opcion == JOptionPane.YES_OPTION){
+                ventana.getMusicaTablero().detener();
+                jugadorRival.getUsuario().setPuntos(3);
+                ruleta.getSndRuleta().detener();;
+                ruleta.getSndRuletDetener().detener();
+                jugadorTurno.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), "Rendirse" , fechaPartida);
+                jugadorRival.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), "Rendirse" , fechaPartida);
+                ventana.mostrarPanelFinal(jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "rendirse"); 
+            }          
         });
     }
     
@@ -731,6 +745,8 @@ public class Partida {
             }
             if(inhabilitadas == 6){
                 ventana.getMusicaTablero().detener();
+                ruleta.getSndRuleta().detener();;
+                ruleta.getSndRuletDetener().detener();
                 jugadorTurno.getUsuario().setPuntos(3);
                 jugadorTurno.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "Acabar con todas las piezas" , fechaPartida);
                 jugadorRival.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "Acabar con todas las piezas" , fechaPartida);
@@ -741,5 +757,27 @@ public class Partida {
         }           
         return -1;   
     }
+    
+    public void noNecromantes(Jugador jugador){
+        boolean hayNecromante = false;
+        for (int i = 0; i < jugador.getPiezas().size(); i++) {
+            if(jugador.getPieza(i) instanceof Necromante && jugador.getPieza(i).getHabilitada()){
+                hayNecromante = true;
+                break;
+            }
+            
+            if(!hayNecromante){
+                for (int j = 0; j < jugador.getPiezas().size(); j++) {
+                    if(jugador.getPieza(i) instanceof Zombie && jugador.getPieza(i).getHabilitada()){
+                        jugador.getPieza(i).setHabilitada(false);
+                        jugador.getPieza(i).setVida(0);
+                        casillas[jugador.getPieza(i).getPosX()][jugador.getPieza(i).getPosX()].setIcon(null);
+                        casillas[jugador.getPieza(i).getPosX()][jugador.getPieza(i).getPosX()].setDisabledIcon(null);
+                    }
+                }
+            }
+        }
+    }
+    
     
 }

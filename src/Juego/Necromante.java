@@ -9,13 +9,9 @@ public class Necromante extends Pieza{
     ArrayList<Zombie> zombies = new ArrayList<>();
     String habilidad;
     private int[][] movimientos = {
-         { 1, -1}, { 1, 0}, { 1, 1},
-        { 0, -1},           { 0, 1},
-        {-1, -1}, {-1, 0}, {-1, 1},
-
-        { 2, -2}, { 2, 0}, { 2, 2},
+                  { 2, 0}, 
         { 0, -2},           { 0, 2},
-        {-2, -2}, {-2, 0}, {-2, 2}
+                  {-2, 0}, 
     };
     private JButton[][] casillas;
     private Jugador oponente;
@@ -31,7 +27,6 @@ public class Necromante extends Pieza{
     
     public void ataqueEspecial(){
         if(habilidad.equals("ATAQUE LANZA")){
-            Ataque = Ataque/2;
             ataqueLanza("ATAQUE");
         }
         else if(habilidad.equals("INVOCAR ZOMBIE")){
@@ -49,7 +44,15 @@ public class Necromante extends Pieza{
             int filaTemp = casillasAdyacentes[i][0];
             int columnaTemp = casillasAdyacentes[i][1];
             if(filaTemp >= 0 && filaTemp < casillas.length && columnaTemp >= 0 && columnaTemp < casillas.length){
-                if(casillas[filaTemp][columnaTemp].getIcon() != null){
+                boolean bloqueado = false;
+                if(Math.abs(movimientos[i][0]) == 2 || Math.abs(movimientos[i][1]) == 2){
+                    int filaMedio = getPosX() + movimientos[i][0] / 2;
+                    int columnaMedio = getPosY() + movimientos[i][1] / 2;
+                    if(casillas[filaMedio][columnaMedio].getIcon() != null){
+                        bloqueado = true;
+                    }
+                }
+                if(!bloqueado && casillas[filaTemp][columnaTemp].getIcon() != null){
                     for (int j = 0; j < oponente.getPiezas().size(); j++) {
                         if(filaTemp == oponente.getPieza(j).getPosX() && columnaTemp == oponente.getPieza(j).getPosY() && oponente.getPieza(j).getHabilitada()){
                             if(accion.equals("ATAQUE")){

@@ -5,7 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
-import Juego.*;
+import musica.*;
 
 public class Ruleta extends JPanel{
    
@@ -13,7 +13,7 @@ public class Ruleta extends JPanel{
     
     private double angulo = 0;
     private Timer timer;
-    private double velocidad = (int)(Math.random()*200);
+    private double velocidad = 200;
     private int centroX = 150;
     private int centroY = 150;
     private int radio = 100;  
@@ -25,6 +25,7 @@ public class Ruleta extends JPanel{
     private double resultado;
     private ActionListener listenerDetenido; // listener para saber si se detuvo la ruleta
     private boolean puedeGirar = true;
+    private int contToques = 0;
     
     private Image imagenRuleta1;
     private Image imagenRuleta2;
@@ -32,6 +33,8 @@ public class Ruleta extends JPanel{
     private boolean imagenMostrar;
     private boolean deshabilitar1[] = {false, false, false, false, false, false};
     private boolean deshabilitar2[] = {false, false, false, false, false, false};
+    Musica sndRuleta = new Musica("MusiquitaRuleta");
+    Musica sndRuletaDetener = new Musica("MusiquitaRuletaDetener");
     
     public Ruleta(boolean imagenMostrar){ 
         setOpaque(false);
@@ -124,8 +127,14 @@ public class Ruleta extends JPanel{
                 int dy = y - centroY;
                 double distancia = Math.sqrt(dx * dx + dy * dy);
                  if (distancia <= radio && puedeGirar) { 
-                    puedeGirar = false;
-                    velocidad = (int)(Math.random()*200);
+                    contToques++;
+                    if(contToques == 1){
+                        sndRuleta.repetir();
+                    }
+                    else if(contToques == 2){
+                        sndRuletaDetener.reproducir();
+                        sndRuleta.detener();
+                    }
                     timer.start();
 
                 }       
@@ -134,23 +143,27 @@ public class Ruleta extends JPanel{
     }
     
     private void timer(){
-        timer = new Timer(16, e ->{
-            angulo += velocidad; 
-            velocidad *= 0.98;
-            
-            vueltas = angulo/360;
-            vEntero = (int)vueltas;
-            double conversion = 360 * (vueltas - (double)vEntero); 
-            
-            if(velocidad<0.2){
-                timer.stop();
-                resultado = conversion + 90;
-                
-                if(listenerDetenido != null){
-                    listenerDetenido.actionPerformed(null);
-                }
-            }   
-            repaint();
+            timer = new Timer(16, e ->{
+                    angulo += velocidad; 
+                    if(contToques == 2){
+                       puedeGirar = false;
+                       velocidad *= 0.98; 
+                    }
+                    vueltas = angulo/360;
+                    vEntero = (int)vueltas;
+                    double conversion = 360 * (vueltas - (double)vEntero); 
+
+                    if(velocidad<0.2){
+                        timer.stop();
+                        velocidad = 200;
+                        contToques = 0;
+                        resultado = conversion + 90;
+
+                        if(listenerDetenido != null){
+                            listenerDetenido.actionPerformed(null);
+                        }
+                    }   
+                    repaint();
         });
     }
     
@@ -193,6 +206,7 @@ public class Ruleta extends JPanel{
     
     public void setImagenMostrar(boolean imagenMostrar){
         this.imagenMostrar = imagenMostrar;
+        repaint();
     }
     
     public void setListenerDetenido(ActionListener listener){
@@ -209,6 +223,14 @@ public class Ruleta extends JPanel{
     
     public void setdeshabilitar2(int i){
         deshabilitar2[i] = true;
+    }
+    
+    public Musica getSndRuleta(){
+        return sndRuleta;
+    }
+    
+    public Musica getSndRuletDetener(){
+        return sndRuletaDetener;
     }
     
 

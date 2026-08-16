@@ -11,7 +11,7 @@ public class MenuPrincipal extends Menu{
     public MenuPrincipal(Usuario usuarioActivo, ArrayList<Usuario> usuarios, String texto,  JPanel contenedor, CardLayout transicion){
         super(texto, contenedor, transicion);
         this.usuarioActivo = usuarioActivo;
-        
+        ventana.setResizable(false); 
         JLabel txtUsuario = new JLabel("Nombre de Usuario: " + usuarioActivo.getUsuario());
         txtUsuario.setForeground(Color.blue);
         txtUsuario.setFont(new Font("Arial", Font.BOLD, 14));

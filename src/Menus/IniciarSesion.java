@@ -9,10 +9,12 @@ import musica.*;
 public class IniciarSesion extends JPanel{
     
     MenuDeInicio ventana;
-    private String txtMensaje = "";
     protected Usuario usuarioActivo;
     ImageIcon imgBoton = new ImageIcon(getClass().getResource("/Imagenes/boton.png"));
     Musica sonidoBoton = new Musica("MusiquitaBoton");
+    protected JPasswordField campoContrasena;
+    protected JCheckBox chkMostrar;
+    protected char caracterOriginal;
     
     public IniciarSesion(MenuDeInicio ventana, JPanel principal, ArrayList<Usuario> usuarios, String txtTitulo, String txtIngCampo1, String txtIngCampo2, String txtBoton1, String txtBoton2){  
         setOpaque(false);
@@ -23,11 +25,18 @@ public class IniciarSesion extends JPanel{
         Titulo.setForeground(Color.WHITE);
         Titulo.setFont(new Font("Arial", Font.BOLD, 20));
         Titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
         JTextField campoUsuario = new JTextField(15);
         JPanel ingUsuario = campoTexto(txtIngCampo1, campoUsuario);
-        JTextField campoContrasena = new JTextField(15);
-        JPanel ingContrasena = campoTexto(txtIngCampo2, campoContrasena); 
+        campoContrasena = new JPasswordField(15);
+        JPanel ingContrasena = campoTexto(txtIngCampo2, campoContrasena);
+        caracterOriginal = campoContrasena.getEchoChar();
+        chkMostrar = new JCheckBox("Mostrar contraseña");
+        chkMostrar.setOpaque(false);
+        chkMostrar.setForeground(Color.WHITE);
+        chkMostrar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        chkMostrar.addActionListener(e -> {
+            mostrarContrasenas(chkMostrar.isSelected());
+        });
         
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER));
         fila.setOpaque(false);
@@ -36,23 +45,30 @@ public class IniciarSesion extends JPanel{
         fila.add(btnIngresar);
         fila.add(Box.createHorizontalStrut(50));
         fila.add(btnRegresar);
-        JLabel mensaje = new JLabel(txtMensaje);
-        mensaje.setForeground(Color.red);
-        mensaje.setFont(new Font("Arial", Font.BOLD, 10));
-        mensaje.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         
         btnIngresar.addActionListener(e -> {
             sonidoBoton.reproducir();
             int numUsuarios = usuarios.size();
             String leerUsuario = campoUsuario.getText();
-            String leerContrasena = campoContrasena.getText();
-            txtMensaje = accionarBoton(leerUsuario, leerContrasena, usuarios, numUsuarios - 1);  
-            mensaje.setText(txtMensaje);
-            campoUsuario.setText(""); //sujeto a cambios
-            campoContrasena.setText(""); // sujeto a cambios
+            String leerContrasena = new String(campoContrasena.getPassword());
+            UIManager.put("OptionPane.background", Color.BLACK);
+            UIManager.put("Panel.background", Color.BLACK);
+            UIManager.put("OptionPane.messageForeground", Color.WHITE);
+            accionarBoton(leerUsuario, leerContrasena, usuarios, numUsuarios - 1);
+            campoUsuario.setText(""); 
+            campoContrasena.setText(""); 
+            chkMostrar.setSelected(false);
+            campoContrasena.setEchoChar(caracterOriginal);
+            limpiarCamposExtra(); 
         });     
         btnRegresar.addActionListener(e -> {
             sonidoBoton.reproducir();
+            campoUsuario.setText(""); 
+            campoContrasena.setText("");
+            chkMostrar.setSelected(false);
+            campoContrasena.setEchoChar(caracterOriginal);
+            limpiarCamposExtra(); 
             ventana.cambiarPanel("MenuDeInicio");
         });
         
@@ -62,9 +78,8 @@ public class IniciarSesion extends JPanel{
         principal.add(ingUsuario);
         principal.add(Box.createVerticalStrut(20));
         principal.add(ingContrasena);
-        principal.add(Box.createVerticalStrut(10));
-        principal.add(mensaje);
-        principal.add(Box.createVerticalStrut(40));
+        principal.add(chkMostrar);
+        principal.add(Box.createVerticalStrut(30));
         principal.add(fila);    
         setVisible(true); 
         
@@ -96,10 +111,12 @@ public class IniciarSesion extends JPanel{
         return boton;
     }
     
-    public String accionarBoton(String leerUsuario, String leerContrasena, ArrayList<Usuario> usuarios, int numUsuarios){
+    public void accionarBoton(String leerUsuario, String leerContrasena, ArrayList<Usuario> usuarios, int numUsuarios){
         leerUsuario = leerUsuario.replaceAll("\\s+", "");
         if(numUsuarios < 0){
-            return "No hay usuarios registrados en el juego";
+            JOptionPane.showMessageDialog(this, "No hay usuarios registrados en el juego", "Error", JOptionPane.ERROR_MESSAGE);
+            ventana.cambiarPanel("MenuDeInicio");
+            return;
         }
         
         Usuario usuario = usuarios.get(numUsuarios);
@@ -107,20 +124,38 @@ public class IniciarSesion extends JPanel{
         if (usuario.getUsuario().equals(leerUsuario)) {
             if (usuario.getContrasena().equals(leerContrasena)) {
                 usuarioActivo = usuario;
+                JOptionPane.showMessageDialog(this, "Ha ingresado correctamente.", "Inicio de sesión", JOptionPane.INFORMATION_MESSAGE);
                 MenuPrincipal menuP = new MenuPrincipal(usuarioActivo, usuarios, "MENU PRINCIPAL", ventana.contenedor, ventana.transicion);
                 ventana.contenedor.add(menuP, "MenuPrincipal");
                 ventana.cambiarPanel("MenuPrincipal");
-                return "Ha ingresado correctamente.";
+                return;
             } else {
-                return "Contraseña incorrecta.";
+                JOptionPane.showMessageDialog(this, "Contraseña incorrecta.", "Error", JOptionPane.ERROR_MESSAGE);
+                ventana.cambiarPanel("MenuDeInicio");
+                return;
             }
         }
         
         if(numUsuarios == 0){
-            return "Nombre de usuario incorrecto.";
+            JOptionPane.showMessageDialog(this, "Nombre de usuario incorrecto.", "Error", JOptionPane.ERROR_MESSAGE);
+            ventana.cambiarPanel("MenuDeInicio");
+            return;
         }
         
-        return accionarBoton(leerUsuario, leerContrasena, usuarios, numUsuarios - 1);
+        accionarBoton(leerUsuario, leerContrasena, usuarios, numUsuarios - 1);
+    }
+    
+    protected void mostrarContrasenas(boolean mostrarTexto){
+        if(mostrarTexto){
+            campoContrasena.setEchoChar((char) 0);
+        }
+        else{
+            campoContrasena.setEchoChar(caracterOriginal);
+        }
+    }
+    
+    protected void limpiarCamposExtra(){
+    
     }
 
 }

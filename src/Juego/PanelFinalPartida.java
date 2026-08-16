@@ -9,7 +9,7 @@ public class PanelFinalPartida extends JPanel{
     
     private JLabel lblPerdedor;
     private JLabel lblGanador;
-    Musica musicaFinal = new Musica("MusiquitaGanarr");
+    Musica musicaFinal = new Musica("MusiquitaGanar");
     
     public PanelFinalPartida(String ganador, String perdedor, String forma){
         musicaFinal.reproducir();

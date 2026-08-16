@@ -11,6 +11,12 @@ public class MenuDeInicio extends Menu{
     
     public MenuDeInicio(String texto,  JPanel contenedor, CardLayout transicion){ 
         super(texto, contenedor, transicion);
+        usuarios.add(new Usuario("FelipeElPequeño", "arroz"));
+        usuarios.add(new Usuario("ElCelestial67", "67676"));
+        usuarios.add(new Usuario("IngJuanCarlos", "ingen"));
+        usuarios.add(new Usuario("CristobalColon", "maria"));
+        usuarios.add(new Usuario("CEOdeSistemas", "soyyo"));
+        
         JButton btnIniciarSesion = Botones(columna, panel, "Iniciar sesion", 60);
         JButton btnCrearJugador = Botones(columna, panel, "Crear Jugador", 60);
         JButton btnSalir = Botones(columna, panel, "Salir", 60);   

@@ -17,7 +17,7 @@ public abstract class Menu extends JPanel{
     Musica sonidoBoton = new Musica("MusiquitaBoton");
     
     //Constructor  que crea el panel y le pone titulo
-    public Menu(String titulo, JPanel contenedor, CardLayout transicion){
+    public Menu(String titulo, JPanel contenedor, CardLayout transicion){         
         setOpaque(false);
         this.contenedor = contenedor;
         this.transicion = transicion;
