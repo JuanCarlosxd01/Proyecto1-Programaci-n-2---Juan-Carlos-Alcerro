@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 import Menus.*;
 import Juego.*;
+import musica.*;
 
 
 public final class VentanaTablero extends JPanel{
@@ -27,6 +28,8 @@ public final class VentanaTablero extends JPanel{
     };
     private PanelFinalPartida panelFinal;
     private VentanaPrincipal ventana;
+    ImageIcon imgBoton = new ImageIcon(getClass().getResource("/Imagenes/boton2.png"));
+    Musica musicaTablero;
     
     public VentanaTablero(VentanaPrincipal ventana, Usuario usuarioActivo, Usuario usuarioOponente, JPanel contenedor, CardLayout transicion){
         this.ventana = ventana;
@@ -37,6 +40,9 @@ public final class VentanaTablero extends JPanel{
         border = new BorderLayout();
         panelPrincipal = new JPanel();
         panelPrincipal.setLayout(border);
+        musicaTablero = new Musica("MusiquitaJuego");
+        musicaTablero.setVolumen(-15.0f);
+        musicaTablero.repetir();
         
         panelRuleta.setLayout(new BoxLayout(panelRuleta, BoxLayout.Y_AXIS));
         JPanel pBotones = new JPanel();
@@ -68,12 +74,16 @@ public final class VentanaTablero extends JPanel{
         ventana.repaint();
     }
     
-    public static JButton Botones(String texto){
+    public JButton Botones(String texto){
         Dimension d = new Dimension(120, 40);
-        JButton boton = new JButton(texto);
+        JButton boton = new JButton(texto, imgBoton);
+        boton.setForeground(Color.WHITE);
+        boton.setFont(new Font("Arial", Font.BOLD, 12));
         boton.setPreferredSize(d);
         boton.setMinimumSize(d);
         boton.setMaximumSize(d);
+        boton.setHorizontalTextPosition(SwingConstants.CENTER);
+        boton.setVerticalTextPosition(SwingConstants.CENTER);
         boton.setAlignmentX(Component.CENTER_ALIGNMENT);     
         return boton;
     }
@@ -94,6 +104,10 @@ public final class VentanaTablero extends JPanel{
         });
         timer.setRepeats(false);
         timer.start();
+    }
+    
+    public Musica getMusicaTablero(){
+        return musicaTablero;
     }
   
    

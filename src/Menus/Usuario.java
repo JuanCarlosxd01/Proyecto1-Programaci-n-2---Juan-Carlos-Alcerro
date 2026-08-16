@@ -64,7 +64,7 @@ public class Usuario {
     
     public String mostrarInformacion(){
         return "Nombre de Usuario: " + usuario + "\nContrasena: " + contrasena + "\nPuntos conseguidos: " + puntos + 
-                "\nFecha de Ingreso:" + fechaIngreso.get(Calendar.DAY_OF_MONTH) + "/" + fechaIngreso.get(Calendar.MONTH) + "/" + fechaIngreso.get(Calendar.YEAR) +
+                "\nFecha de Ingreso:" + fechaIngreso.get(Calendar.DAY_OF_MONTH) + "/" + (fechaIngreso.get(Calendar.MONTH)+1)+ "/" + fechaIngreso.get(Calendar.YEAR) +
                 "\nCuenta activa: " + activo;
     }
     @Override

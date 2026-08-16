@@ -1,6 +1,7 @@
 
 package Menus;
 
+import musica.*;
 import java.awt.*;
 import javax.swing.*;
 
@@ -9,10 +10,15 @@ public final class VentanaPrincipal extends JFrame{
     CardLayout transicion;
     JPanel contenedor;
     private ImageIcon fondoMenu = new ImageIcon(getClass().getResource("/Imagenes/FondoMenu.png"));
+    Musica musicaFondo;
     
     public VentanaPrincipal(String titulo){
         setTitle(titulo);
         setSize(800,800);
+        musicaFondo = new Musica("MusiquitaFondo");
+        musicaFondo.setVolumen(-20.0f);
+        musicaFondo.repetir();
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -41,6 +47,10 @@ public final class VentanaPrincipal extends JFrame{
     
     public void mostrarMenuPrincipal(){
         transicion.show(contenedor, "MenuDeInicio");
+    }
+    
+    public Musica getMusicaFondo(){
+        return musicaFondo;
     }
     
     

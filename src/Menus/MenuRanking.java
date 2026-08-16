@@ -35,6 +35,7 @@ public class MenuRanking extends Menu{
         JButton btnRegresar = Botones(columna, panel, "REGRESAR", 40);
         
         btnRegresar.addActionListener(e -> {
+            sonidoBoton.reproducir();
             cambiarPanel("MenuPrincipal");
         });
         

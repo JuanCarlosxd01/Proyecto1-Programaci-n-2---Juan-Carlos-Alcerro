@@ -3,6 +3,7 @@ package Menus;
 
 import javax.swing.*;
 import java.awt.*;
+import musica.*;
 
 public abstract class Menu extends JPanel{
     
@@ -12,6 +13,8 @@ public abstract class Menu extends JPanel{
     CardLayout transicion;
     JPanel contenedor;
     protected static VentanaPrincipal ventana;
+    ImageIcon imgBoton = new ImageIcon(getClass().getResource("/Imagenes/boton.png"));
+    Musica sonidoBoton = new Musica("MusiquitaBoton");
     
     //Constructor  que crea el panel y le pone titulo
     public Menu(String titulo, JPanel contenedor, CardLayout transicion){
@@ -34,11 +37,15 @@ public abstract class Menu extends JPanel{
       
     }
     //Funcion para crear botones
-    public static JButton Botones(BoxLayout columna, JPanel panel, String texto, int esp){
-        Dimension d = new Dimension(300, 60);
-        JButton boton = new JButton(texto);
+    public JButton Botones(BoxLayout columna, JPanel panel, String texto, int esp){
+        Dimension d = new Dimension(200, 60);
+        JButton boton = new JButton(texto, imgBoton);
+        boton.setForeground(Color.WHITE);
+        boton.setFont(new Font("Arial", Font.BOLD, 12));
         boton.setPreferredSize(d);
         boton.setMaximumSize(d);
+        boton.setHorizontalTextPosition(SwingConstants.CENTER);
+        boton.setVerticalTextPosition(SwingConstants.CENTER);
         boton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createVerticalStrut(esp));
         panel.add(boton);    

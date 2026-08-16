@@ -52,6 +52,7 @@ public class MenuMiCuenta extends Menu{
         });
         
         btnCerrarCuenta.addActionListener(e -> {
+            sonidoBoton.reproducir();
             int opcion = JOptionPane.showConfirmDialog(null, "¿Está seguro de cerrar la cuenta?", "Confirmacion", JOptionPane.YES_NO_OPTION);
             if(opcion == JOptionPane.YES_OPTION){
                 desactivarCuenta(usuarios, usuarioActivo, usuarios.size() - 1);
@@ -60,6 +61,7 @@ public class MenuMiCuenta extends Menu{
         });
     
         btnRegresar.addActionListener(e -> {
+            sonidoBoton.reproducir();
             cambiarPanel("MenuPrincipal");
         });
         

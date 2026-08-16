@@ -28,6 +28,7 @@ public class Ruleta extends JPanel{
     
     private Image imagenRuleta1;
     private Image imagenRuleta2;
+    private Image imagenFlecha;
     private boolean imagenMostrar;
     private boolean deshabilitar1[] = {false, false, false, false, false, false};
     private boolean deshabilitar2[] = {false, false, false, false, false, false};
@@ -36,6 +37,7 @@ public class Ruleta extends JPanel{
         setOpaque(false);
         imagenRuleta1 = new ImageIcon(getClass().getResource("/Imagenes/ruleta1.png")).getImage();
         imagenRuleta2 = new ImageIcon(getClass().getResource("/Imagenes/ruleta2.png")).getImage();
+        imagenFlecha = new ImageIcon(getClass().getResource("/Imagenes/Flechita.png")).getImage();
         this.imagenMostrar = imagenMostrar;
         setPreferredSize(new Dimension(288, 300)); 
         timer();
@@ -107,7 +109,7 @@ public class Ruleta extends JPanel{
         
         dibujar2.setTransform(original);
         dibujar2.setColor(Color.BLACK);
-        dibujar2.fillRect(145, 10, 10, 35);
+        dibujar2.drawImage(imagenFlecha, 135, 10, 30, 70, this);
      
     }
     

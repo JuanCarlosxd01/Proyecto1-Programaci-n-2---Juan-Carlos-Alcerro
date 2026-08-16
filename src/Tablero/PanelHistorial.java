@@ -19,9 +19,8 @@ public class PanelHistorial extends JPanel{
         historial.setFocusable(false);
         cambiarFuente();
         scroll = new JScrollPane(historial);
-        
         scroll.setOpaque(false);
-        
+        scroll.setBorder(BorderFactory.createEmptyBorder(25, 15, 25, 15));
         scroll.getViewport().setOpaque(false);
         scroll.setPreferredSize(new Dimension(this.getWidth() - 50, this.getHeight() - 50));
         scroll.setMaximumSize(new Dimension(this.getWidth() - 50, this.getHeight() - 50));

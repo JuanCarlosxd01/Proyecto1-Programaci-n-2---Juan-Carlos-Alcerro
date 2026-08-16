@@ -18,15 +18,18 @@ public class MenuDeInicio extends Menu{
         JPanel principalIniciarSesion = crearPanel("IniciarSesion");
         IniciarSesion sesion = new IniciarSesion(this, principalIniciarSesion, usuarios, "Iniciar Sesion", "Nombre de Usuario: ", "Contraseña: ", "Ingresar", "Regresar"); 
         btnIniciarSesion.addActionListener(e -> {    
+            sonidoBoton.reproducir();
             cambiarPanel("IniciarSesion");
         }); 
         
         JPanel principalCrearJugador = crearPanel("CrearJugador");
         CrearJugador crear = new CrearJugador(this, principalCrearJugador, usuarios);
-        btnCrearJugador.addActionListener(e -> {   
+        btnCrearJugador.addActionListener(e -> {  
+            sonidoBoton.reproducir();
             cambiarPanel("CrearJugador");  
         });
         btnSalir.addActionListener(e -> {
+            sonidoBoton.reproducir();
             System.exit(0);
         });
         

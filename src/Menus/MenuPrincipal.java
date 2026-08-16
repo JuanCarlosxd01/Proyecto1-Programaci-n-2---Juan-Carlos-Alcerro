@@ -25,6 +25,7 @@ public class MenuPrincipal extends Menu{
         JButton btnCerrarSesion = Botones(columna, panel, "CERRAR SESION", 40);  
         
         btnJugar.addActionListener(e -> {
+            sonidoBoton.reproducir();
             MenuJugar menuJ = new MenuJugar("JUGAR", contenedor, transicion, usuarios, usuarioActivo);
             contenedor.add(menuJ, "Jugar");
             cambiarPanel("Jugar");
@@ -32,6 +33,7 @@ public class MenuPrincipal extends Menu{
         
         
         btnMiCuenta.addActionListener(e -> {  
+            sonidoBoton.reproducir();
             MenuMiCuenta menuC = new MenuMiCuenta("MI CUENTA", contenedor, transicion, usuarios, usuarioActivo);
             contenedor.add(menuC, "MiCuenta");
             cambiarPanel("MiCuenta");
@@ -39,6 +41,7 @@ public class MenuPrincipal extends Menu{
         
         
         btnReportes.addActionListener(e -> {
+            sonidoBoton.reproducir();
             MenuReportes menuR = new MenuReportes("REPORTES", contenedor, transicion, usuarios, usuarioActivo);
             contenedor.add(menuR, "Reportes");
             cambiarPanel("Reportes");
@@ -46,6 +49,7 @@ public class MenuPrincipal extends Menu{
         
         
         btnCerrarSesion.addActionListener(e -> {
+            sonidoBoton.reproducir();
             this.usuarioActivo = null;
             cambiarPanel("MenuDeInicio");
         });

@@ -3,13 +3,16 @@ package Juego;
 
 import javax.swing.*;
 import java.awt.*;
+import musica.*;
 
 public class PanelFinalPartida extends JPanel{
     
     private JLabel lblPerdedor;
     private JLabel lblGanador;
+    Musica musicaFinal = new Musica("MusiquitaGanarr");
     
     public PanelFinalPartida(String ganador, String perdedor, String forma){
+        musicaFinal.reproducir();
         setOpaque(false);
         setLayout(new GridBagLayout());
         JPanel panelMensaje = new JPanel();
@@ -20,7 +23,7 @@ public class PanelFinalPartida extends JPanel{
             lblPerdedor = new JLabel(perdedor + " se ha retirado.");
             lblGanador = new JLabel("¡Felicidades, " + ganador +", has ganado 3 puntos!");
         }
-        else if(forma.equals("ganar")){
+        else if(forma.equals("Acabar con todas las piezas")){
             lblPerdedor = new JLabel(ganador + " venció a " + perdedor + ".");
             lblGanador = new JLabel("¡Felicidades has ganado 3 puntos!");
         }

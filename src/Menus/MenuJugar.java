@@ -15,12 +15,14 @@ public class MenuJugar extends Menu{
         add(panel);
         
         btnSeleccionarOponente.addActionListener(e -> {
+            sonidoBoton.reproducir();
             PanelSeleccionarOponente oponente = new PanelSeleccionarOponente("Seleccionar Oponente: ", contenedor, transicion, usuarios, usuarioActivo);           
             contenedor.add(oponente, "Seleccionar Oponente");
             cambiarPanel("Seleccionar Oponente");
         });
         
         btnRegresar.addActionListener(e -> {
+            sonidoBoton.reproducir();
             cambiarPanel("MenuPrincipal");
         });
     }

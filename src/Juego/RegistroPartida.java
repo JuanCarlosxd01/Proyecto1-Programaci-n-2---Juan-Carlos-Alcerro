@@ -23,7 +23,7 @@ public class RegistroPartida {
                 "• Oponente: " + oponente + "\n" +
                 "• Ganador: " + ganador + "\n" +
                 "• Forma: " + forma + "\n" + 
-                "• Fecha" +  tiempo.get(Calendar.DAY_OF_MONTH) + "/" +
+                "• Fecha: " +  tiempo.get(Calendar.DAY_OF_MONTH) + "/" +
                 (tiempo.get(Calendar.MONTH) + 1) + "/" +
                 tiempo.get(Calendar.YEAR) + " - " +
                 tiempo.get(Calendar.HOUR) + ":" +

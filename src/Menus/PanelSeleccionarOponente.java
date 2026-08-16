@@ -35,9 +35,11 @@ public class PanelSeleccionarOponente extends Menu{
         
         add(panel);
         
-        btnContinuar.addActionListener(e ->{ // Cambiar para que dentro del jugador se almacene al usuario 
+        btnContinuar.addActionListener(e ->{ 
+            sonidoBoton.reproducir();
             Usuario usuarioOponente = (Usuario) lista.getSelectedItem();
             if(usuarioOponente != null){
+                ventana.getMusicaFondo().detener();
                 VentanaTablero ventanaT = new VentanaTablero(ventana, usuarioActivo, usuarioOponente, contenedor, transicion);
                 contenedor.add(ventanaT, "Tablero");
                 cambiarPanel("Tablero"); 

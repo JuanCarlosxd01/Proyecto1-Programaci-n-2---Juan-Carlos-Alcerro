@@ -15,18 +15,21 @@ public class MenuReportes extends Menu{
         JButton btnRegresar = Botones(columna, panel, "REGRESAR", 50);
         
         btnRankingJugadores.addActionListener(e -> {
+            sonidoBoton.reproducir();
             MenuRanking ranking = new MenuRanking("RANKING DE JUGADORES", contenedor, transicion, usuarios);
             contenedor.add(ranking, "ranking");
             cambiarPanel("ranking");
         });
         
         btnHistorial.addActionListener(e ->{
+            sonidoBoton.reproducir();
             MenuHistorial historial = new MenuHistorial("HISTORIAL DE PARTIDAS", contenedor, transicion, usuarioActivo);
             contenedor.add(historial, "historial");
             cambiarPanel("historial");
         });  
                 
         btnRegresar.addActionListener(e -> {
+            sonidoBoton.reproducir();
             cambiarPanel("MenuPrincipal");
         });
         

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import Menus.*;
 import java.util.Calendar;
+import musica.*;
 
 public class Partida {
     
@@ -53,6 +54,8 @@ public class Partida {
     JPanel panelPrincipal;
     VentanaTablero ventana;
     Calendar fechaPartida;
+    Musica musicaMover = new Musica("MusiquitaMover");
+    Musica musicaAtacar = new Musica("MusiquitaAtaque");
 
     public Partida(Tablero tablero, Usuario usuarioActivo, Usuario usuarioOponente, JButton btnAtacar, JButton btnHabilidad, JButton btnMover, PanelHistorial panelH, PanelInformacion panelI, JPanel panelPrincipal, VentanaTablero ventana){
         fechaPartida = Calendar.getInstance();
@@ -66,9 +69,9 @@ public class Partida {
         botones[0] = btnAtacar;
         botones[1] = btnHabilidad;
         botones[2] = btnMover;
-        btnAtaqueDistancia = VentanaTablero.Botones("⚔");
-        btnInvocar = VentanaTablero.Botones("☠");
-        btnAtaqueZombie = VentanaTablero.Botones("Z");
+        btnAtaqueDistancia = ventana.Botones("Ataque Lanza");
+        btnInvocar = ventana.Botones("Invocar Zombie");
+        btnAtaqueZombie = ventana.Botones("Ataque Zombie");
         
         jugador1 = new Jugador(usuarioActivo, false, Color.BLACK, 0);
         jugador2 = new Jugador(usuarioOponente, false, Color.gray, 5);
@@ -77,11 +80,11 @@ public class Partida {
         clickCasilla();
         clickBotones();
         rendirse();
+        iniciarTurno(1);
         
         tablero.inhabilitarCasillas(5, 5);
         panelI.actualizarJugador(jugadorTurno.getUsuario().getUsuario());
         panelI.actualizarRival(jugadorRival.getUsuario().getUsuario());
-        iniciarTurno(1);
     }
     
     public void iniciarTurno(int giros){
@@ -273,7 +276,7 @@ public class Partida {
     }  
 
     public void moverPieza(int viejaFila, int viejaColumna, int nuevaFila, int nuevaColumna, int numPieza){  
-            
+        musicaMover.reproducir();
         casillas[nuevaFila][nuevaColumna].setIcon(casillas[viejaFila][viejaColumna].getIcon());
         casillas[nuevaFila][nuevaColumna].setDisabledIcon(casillas[viejaFila][viejaColumna].getIcon());
         casillas[viejaFila][viejaColumna].setIcon(null);
@@ -422,6 +425,7 @@ public class Partida {
     
     
     public void hacerAtaque(int xEnemigo, int yEnemigo, int numPieza){
+        musicaAtacar.reproducir();
         int ataque = jugadorTurno.getPieza(numPieza).getAtaque();
         for (int i = 0; i < jugadorRival.getPiezas().size(); i++) {
             int x = jugadorRival.getPieza(i).getPosX();
@@ -451,7 +455,7 @@ public class Partida {
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
                         jugadaMensaje("MATAR PIEZA");
-                        partidaSigue(jugadorRival.getPiezas().size() - 1);
+                        partidaSigue(jugadorRival.getPiezas().size() - 1, 0);
                         if(!(jugadorRival.getPieza(i) instanceof Zombie)){
                             if(jugadorRival == jugador1){
                                 ruleta.setdeshabilitar1(i);
@@ -471,6 +475,7 @@ public class Partida {
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
                         jugadaMensaje("MATAR PIEZA");
+                        partidaSigue(jugadorRival.getPiezas().size() - 1, 0);
                         if(!(jugadorRival.getPieza(i) instanceof Zombie)){
                             if(jugadorRival == jugador1){
                                 ruleta.setdeshabilitar1(i);
@@ -504,10 +509,10 @@ public class Partida {
     }
     
     public void agregarBotones(){
-        Dimension tamano = new Dimension(50, 20);
-        btnAtaqueDistancia.setPreferredSize(tamano );
-        btnAtaqueDistancia.setMaximumSize(tamano );
-        btnInvocar.setPreferredSize(tamano );
+        Dimension tamano = new Dimension(130, 20);
+        btnAtaqueDistancia.setPreferredSize(tamano);
+        btnAtaqueDistancia.setMaximumSize(tamano);
+        btnInvocar.setPreferredSize(tamano);
         btnInvocar.setMaximumSize(tamano);
         btnAtaqueZombie.setPreferredSize(tamano);
         btnAtaqueZombie.setMaximumSize(tamano);
@@ -709,6 +714,7 @@ public class Partida {
     public void rendirse(){
         JButton boton = panelI.getBtnRendirse();
         boton.addActionListener(e ->{
+            ventana.getMusicaTablero().detener();
             jugadorRival.getUsuario().setPuntos(3);
             jugadorTurno.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), "Rendirse" , fechaPartida);
             jugadorRival.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), "Rendirse" , fechaPartida);
@@ -716,22 +722,24 @@ public class Partida {
         });
     }
     
-    public int partidaSigue(int i){
-        int inhabilitadas = 0;
+    public int partidaSigue(int i, int inhabilitadas){
         if(i >= 0){
-            if(!jugadorRival.getPieza(i).getHabilitada()){
-                inhabilitadas++;
-                if(inhabilitadas == jugadorRival.getPiezas().size()){
-                    jugadorTurno.getUsuario().setPuntos(3);
-                    jugadorTurno.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "ganar" , fechaPartida);
-                    jugadorRival.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "ganar" , fechaPartida);
-                    ventana.mostrarPanelFinal(jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "Acabar con todas las piezas");
+            if(!(jugadorRival.getPieza(i) instanceof Zombie)){
+                if(!jugadorRival.getPieza(i).getHabilitada()){
+                    inhabilitadas++;
                 }
-                return partidaSigue(i - 1);
-            }           
-        }
-        return -1;
-        
+            }
+            if(inhabilitadas == 6){
+                ventana.getMusicaTablero().detener();
+                jugadorTurno.getUsuario().setPuntos(3);
+                jugadorTurno.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "Acabar con todas las piezas" , fechaPartida);
+                jugadorRival.getUsuario().agregarRegistroPartida(jugadorTurno.getUsuario().getUsuario(), jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "Acabar con todas las piezas" , fechaPartida);
+                ventana.mostrarPanelFinal(jugadorRival.getUsuario().getUsuario(), jugadorTurno.getUsuario().getUsuario(), "Acabar con todas las piezas");
+                return 1;
+            }    
+            return partidaSigue(i - 1, inhabilitadas);
+        }           
+        return -1;   
     }
     
 }

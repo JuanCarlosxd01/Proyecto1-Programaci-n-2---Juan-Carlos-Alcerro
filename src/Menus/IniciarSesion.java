@@ -4,12 +4,15 @@ package Menus;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import musica.*;
 
 public class IniciarSesion extends JPanel{
     
     MenuDeInicio ventana;
     private String txtMensaje = "";
     protected Usuario usuarioActivo;
+    ImageIcon imgBoton = new ImageIcon(getClass().getResource("/Imagenes/boton.png"));
+    Musica sonidoBoton = new Musica("MusiquitaBoton");
     
     public IniciarSesion(MenuDeInicio ventana, JPanel principal, ArrayList<Usuario> usuarios, String txtTitulo, String txtIngCampo1, String txtIngCampo2, String txtBoton1, String txtBoton2){  
         setOpaque(false);
@@ -39,6 +42,7 @@ public class IniciarSesion extends JPanel{
         mensaje.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         btnIngresar.addActionListener(e -> {
+            sonidoBoton.reproducir();
             int numUsuarios = usuarios.size();
             String leerUsuario = campoUsuario.getText();
             String leerContrasena = campoContrasena.getText();
@@ -48,6 +52,7 @@ public class IniciarSesion extends JPanel{
             campoContrasena.setText(""); // sujeto a cambios
         });     
         btnRegresar.addActionListener(e -> {
+            sonidoBoton.reproducir();
             ventana.cambiarPanel("MenuDeInicio");
         });
         
@@ -78,9 +83,13 @@ public class IniciarSesion extends JPanel{
         return fila;
     }
     
-    public static JButton Botones(String texto){
-        Dimension d = new Dimension(300, 60);
-        JButton boton = new JButton(texto);
+    public JButton Botones(String texto){
+        Dimension d = new Dimension(200, 60);
+        JButton boton = new JButton(texto, imgBoton);
+        boton.setForeground(Color.WHITE);
+        boton.setFont(new Font("Arial", Font.BOLD, 12));
+        boton.setHorizontalTextPosition(SwingConstants.CENTER);
+        boton.setVerticalTextPosition(SwingConstants.CENTER);
         boton.setPreferredSize(d);
         boton.setMaximumSize(d);
         
