@@ -28,6 +28,7 @@ public class Partida {
     Necromante nSeleccionado = null;
     boolean lanzaN = false;
     public PanelFinalPartida panelF;
+    private Component espacioNecromante = Box.createVerticalStrut(10);
     
     int xVieja;
     int yVieja;
@@ -435,7 +436,7 @@ public class Partida {
         for (int i = 0; i < jugadorRival.getPiezas().size(); i++) {
             int x = jugadorRival.getPieza(i).getPosX();
             int y = jugadorRival.getPieza(i).getPosY();
-            if(xEnemigo == x && yEnemigo == y){
+            if(xEnemigo == x && yEnemigo == y && jugadorRival.getPieza(i).getHabilitada()){
                 if(!lanzaN){ 
                     if(jugadorRival.getPieza(i).getEscudo() <= 0){
                         jugadorRival.getPieza(i).setVida(jugadorRival.getPieza(i).getVida() - ataque);
@@ -459,6 +460,10 @@ public class Partida {
                     if(jugadorRival.getPieza(i).getVida() <= 0){
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
+                        casillas[x][y].setDisabledIcon(null);
+                        casillas[x][y].setEnabled(false);
+                        jugadorRival.getPieza(i).setPosX(-1);
+                        jugadorRival.getPieza(i).setPosY(-1);
                         noNecromantes(jugadorRival);
                         jugadaMensaje("MATAR PIEZA");
                         partidaSigue(jugadorRival.getPiezas().size() - 1, 0);
@@ -480,6 +485,10 @@ public class Partida {
                         jugadorRival.getPieza(i).setVida(0);
                         jugadorRival.getPieza(i).setHabilitada(false);
                         casillas[x][y].setIcon(null);
+                        casillas[x][y].setDisabledIcon(null);
+                        casillas[x][y].setEnabled(false);   
+                        jugadorRival.getPieza(i).setPosX(-1);
+                        jugadorRival.getPieza(i).setPosY(-1);
                         noNecromantes(jugadorRival);
                         jugadaMensaje("MATAR PIEZA");
                         partidaSigue(jugadorRival.getPiezas().size() - 1, 0);
@@ -522,12 +531,13 @@ public class Partida {
         btnInvocar.setMaximumSize(tamano);
         btnAtaqueZombie.setPreferredSize(tamano);
         btnAtaqueZombie.setMaximumSize(tamano);
-        ventana.getPanelRuleta().add(btnAtaqueDistancia, 6);
-        ventana.getPanelRuleta().add(btnInvocar, 7);
-        ventana.getPanelRuleta().add(btnAtaqueZombie, 8);
-        ventana.getPanelRuleta().add(Box.createVerticalStrut(10), 9);
-        ventana.getPanelRuleta().revalidate();
-        ventana.getPanelRuleta().repaint();
+        JPanel panel = ventana.getPanelRuleta();
+        panel.add(btnAtaqueDistancia, 6);
+        panel.add(btnInvocar, 7);
+        panel.add(btnAtaqueZombie, 8);
+        panel.add(espacioNecromante, 9);
+        panel.revalidate();
+        panel.repaint();
     }
     
     public void accionarHabilidadesNecromante(){
@@ -576,7 +586,6 @@ public class Partida {
             piezasSeleccionadas = false;
             tablero.inhabilitarCasillas(5, 5);
             seleccionarZombies("ATAQUE");
-            nSeleccionado.ataqueEspecial();
         });
     }
     
@@ -597,7 +606,7 @@ public class Partida {
             for (int j = 0; j < casillas[0].length; j++) {
                 for (int k = 0; k < jugadorTurno.getPiezas().size(); k++) {
                     if(Math.max(Math.abs(jugadorTurno.getPieza(k).getPosX() - nSeleccionado.getPosX()), Math.abs(jugadorTurno.getPieza(k).getPosY() - nSeleccionado.getPosY()))  >= 3){
-                        if(i == jugadorTurno.getPieza(k).getPosX() && j == jugadorTurno.getPieza(k).getPosY() && jugadorTurno.getPieza(k) instanceof Zombie){
+                        if(i == jugadorTurno.getPieza(k).getPosX() && j == jugadorTurno.getPieza(k).getPosY() && jugadorTurno.getPieza(k) instanceof Zombie && jugadorTurno.getPieza(k).getHabilitada()){
                             if(opcion.equals("ATAQUE")){
                                 casillas[i][j].setEnabled(true);
                                 aparecerBotones(i, j);
@@ -614,11 +623,13 @@ public class Partida {
     }
     
     public void quitarBotones(){
-        ventana.getPanelRuleta().remove(btnAtaqueDistancia);
-        ventana.getPanelRuleta().remove(btnInvocar);
-        ventana.getPanelRuleta().remove(btnAtaqueZombie);
-        ventana.getPanelRuleta().revalidate();
-        ventana.getPanelRuleta().repaint();
+        JPanel panel = ventana.getPanelRuleta();
+        panel.remove(btnAtaqueDistancia);
+        panel.remove(btnInvocar);
+        panel.remove(btnAtaqueZombie);
+        panel.remove(espacioNecromante);
+        panel.revalidate();
+        panel.repaint();
         tablero.inhabilitarCasillas(5, 5);
         terminarTurno();
     }
@@ -765,18 +776,18 @@ public class Partida {
                 hayNecromante = true;
                 break;
             }
-            
-            if(!hayNecromante){
-                for (int j = 0; j < jugador.getPiezas().size(); j++) {
-                    if(jugador.getPieza(i) instanceof Zombie && jugador.getPieza(i).getHabilitada()){
-                        jugador.getPieza(i).setHabilitada(false);
-                        jugador.getPieza(i).setVida(0);
-                        casillas[jugador.getPieza(i).getPosX()][jugador.getPieza(i).getPosX()].setIcon(null);
-                        casillas[jugador.getPieza(i).getPosX()][jugador.getPieza(i).getPosX()].setDisabledIcon(null);
-                    }
+        }
+        if(!hayNecromante){
+            for (int j = 0; j < jugador.getPiezas().size(); j++) {
+                if(jugador.getPieza(j) instanceof Zombie && jugador.getPieza(j).getHabilitada()){
+                    jugador.getPieza(j).setHabilitada(false);
+                    jugador.getPieza(j).setVida(0);
+                    casillas[jugador.getPieza(j).getPosX()][jugador.getPieza(j).getPosY()].setIcon(null);
+                    casillas[jugador.getPieza(j).getPosX()][jugador.getPieza(j).getPosY()].setDisabledIcon(null);
                 }
             }
         }
+        
     }
     
     

@@ -13,7 +13,7 @@ public class Ruleta extends JPanel{
     
     private double angulo = 0;
     private Timer timer;
-    private double velocidad = 200;
+    private double velocidad = (int)(Math.random() * 151) + 50;
     private int centroX = 150;
     private int centroY = 150;
     private int radio = 100;  
@@ -85,27 +85,27 @@ public class Ruleta extends JPanel{
         else{
            dibujar2.drawImage(imagenRuleta1, 50, 50, 200, 200, this);
            if(deshabilitar2[1]){
-                dibujar2.setColor(new Color(255, 255, 255, 100));
+                dibujar2.setColor(new Color(0, 0, 0, 150));
                 dibujar2.fillArc(50, 50, 200, 200, 330, 60);
             }
             if(deshabilitar2[0]){
-                dibujar2.setColor(new Color(255, 255, 255, 100));
+                dibujar2.setColor(new Color(0, 0, 0, 150));
                 dibujar2.fillArc(50, 50, 200, 200, 30, 60);
             }
             if(deshabilitar2[2]){
-                dibujar2.setColor(new Color(255, 255, 255, 100));
+                dibujar2.setColor(new Color(0, 0, 0, 150));
                 dibujar2.fillArc(50, 50, 200, 200, 90, 60);
             }
             if(deshabilitar2[4]){
-                dibujar2.setColor(new Color(255, 255, 255, 100));
+                dibujar2.setColor(new Color(0, 0, 0, 150));
                 dibujar2.fillArc(50, 50, 200, 200, 150, 60);
             }
             if(deshabilitar2[5]){
-                dibujar2.setColor(new Color(255, 255, 255, 100));
+                dibujar2.setColor(new Color(0, 0, 0, 150));
                 dibujar2.fillArc(50, 50, 200, 200, 210, 60);
             }
             if(deshabilitar2[3]){
-                dibujar2.setColor(new Color(255, 255, 255, 100));
+                dibujar2.setColor(new Color(0, 0, 0, 150));
                 dibujar2.fillArc(50, 50, 200, 200, 270, 60);
             }
         }    
@@ -147,7 +147,7 @@ public class Ruleta extends JPanel{
                     angulo += velocidad; 
                     if(contToques == 2){
                        puedeGirar = false;
-                       velocidad *= 0.98; 
+                       velocidad *= 0.96; 
                     }
                     vueltas = angulo/360;
                     vEntero = (int)vueltas;
@@ -155,7 +155,7 @@ public class Ruleta extends JPanel{
 
                     if(velocidad<0.2){
                         timer.stop();
-                        velocidad = 200;
+                        velocidad = (int)(Math.random() * 151) + 50;
                         contToques = 0;
                         resultado = conversion + 90;
 
@@ -169,7 +169,7 @@ public class Ruleta extends JPanel{
     
     public String getResultado(){
         if(resultado > 360){
-            resultado = resultado - 360;
+            resultado -= 360;
         }
         boolean temp[];
         if(imagenMostrar){
@@ -185,13 +185,13 @@ public class Ruleta extends JPanel{
         else if((resultado >= 30 && resultado < 90) && !temp[0]){
             return "Hombre Lobo";
         }
-        if((resultado >= 150 && resultado < 210) && !temp[4]){
+        else if((resultado >= 150 && resultado < 210) && !temp[4]){
             return "Vampiro";
         }
-        else if(((resultado >= 330 && resultado <= 360) || (resultado > 0 && resultado < 30)) && !temp[1]){
+        else if(((resultado >= 330 && resultado < 360) || (resultado >= 0 && resultado < 30)) && !temp[1]){
             return "Vampiro";
         }
-        if((resultado >= 90 && resultado < 150) && !temp[2]){
+        else if((resultado >= 90 && resultado < 150) && !temp[2]){
             return "Necromante";
         } 
         else if((resultado >= 270 && resultado < 330) && !temp[3]){
@@ -219,10 +219,12 @@ public class Ruleta extends JPanel{
     
     public void setdeshabilitar1(int i){
         deshabilitar1[i] = true;
+        repaint();
     }
     
     public void setdeshabilitar2(int i){
         deshabilitar2[i] = true;
+        repaint();
     }
     
     public Musica getSndRuleta(){

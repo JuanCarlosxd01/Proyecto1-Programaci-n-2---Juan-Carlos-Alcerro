@@ -6,8 +6,6 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class MenuMiCuenta extends Menu{
-    
-    ImageIcon imagen = new ImageIcon(getClass().getResource("/Imagenes/ImagenPanel.png"));
 
     
     public MenuMiCuenta(String titulo, JPanel contenedor, CardLayout transicion, ArrayList<Usuario> usuarios, Usuario usuarioActivo){

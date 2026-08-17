@@ -26,10 +26,10 @@ public class Necromante extends Pieza{
     
     
     public void ataqueEspecial(){
-        if(habilidad.equals("ATAQUE LANZA")){
+        if("ATAQUE LANZA".equals(habilidad)){
             ataqueLanza("ATAQUE");
         }
-        else if(habilidad.equals("INVOCAR ZOMBIE")){
+        else if("INVOCAR ZOMBIE".equals(habilidad)){
             invocarZombie(num);
         }
     }
